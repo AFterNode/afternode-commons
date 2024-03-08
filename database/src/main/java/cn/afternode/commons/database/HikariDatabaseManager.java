@@ -15,6 +15,10 @@ import java.util.Map;
  * ConnectionProvider with <a href="https://github.com/brettwooldridge/HikariCP">HikariCP</a>
  */
 public class HikariDatabaseManager implements IDatabaseManager {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private final HikariDataSource source;
     private final ConnectionMonitor monitor;
     private final Gson gson = new Gson();
