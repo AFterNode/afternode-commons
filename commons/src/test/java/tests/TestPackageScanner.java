@@ -9,7 +9,7 @@ import java.io.IOException;
 @TestPackageScanner.TestAnno
 public class TestPackageScanner {
     @Test
-    public void test() throws IOException {
+    public void test() {
         Reflections ref = new Reflections("tests");
         System.out.println(ref.get(Scanners.SubTypes.of(Scanners.TypesAnnotated.of(TestAnno.class)).asClass()).toArray(new Class<?>[0])[0].getName());
     }

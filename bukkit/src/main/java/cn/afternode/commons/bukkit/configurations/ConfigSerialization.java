@@ -5,7 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 public class ConfigSerialization {
     /**
      * Ignore field from serialization and deserialization

@@ -8,7 +8,7 @@ public class ConnectionMonitor {
     private final long lifetime;
     private final HashMap<Connection, Long> stack = new HashMap<>();
     private final Thread thread;
-    private boolean run = false;
+    private boolean run;
 
     ConnectionMonitor(String name, long lifetime) {
         this.lifetime = lifetime;

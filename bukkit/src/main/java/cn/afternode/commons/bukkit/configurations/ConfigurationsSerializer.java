@@ -85,9 +85,9 @@ public class ConfigurationsSerializer {
                 if (f.isAnnotationPresent(ConfigSerialization.Serialize.class)) {
                     var sec = dest.createSection(f.getName());
                     serialize(sec, f.get(src));
-                    dest.set(f.getName(), sec);
+                    dest.set(key, sec);
                 } else {
-                    dest.set(f.getName(), f.get(src));
+                    dest.set(key, f.get(src));
                 }
             } catch (Throwable t) {
                 throw new RuntimeException("Error processing field %s".formatted(f.getName()), t);

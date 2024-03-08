@@ -35,7 +35,7 @@ public class Registration {
      * @throws RuntimeException Not a valid CommandExecutor/TabExecutor; Unable to create instance
      * @see RegisterPluginCommand
      */
-    public void registerPluginCommands(String packageName) throws IOException, RuntimeException {
+    public void registerPluginCommands(String packageName) throws RuntimeException {
         Reflections ref = new Reflections(packageName);
         Set<Class<?>> classes =
                 ref.get(Scanners.SubTypes.of(Scanners.TypesAnnotated.with(RegisterPluginCommand.class)).asClass());
@@ -67,11 +67,9 @@ public class Registration {
     /**
      * Find classes with provided package name and register as event listener
      * @param packageName Target package name
-     * @throws IOException Error while looking for class
-     * @throws RuntimeException Not a valid listener; Cannot create instance
      * @see RegisterListener
      */
-    public void registerListeners(String packageName) throws IOException {
+    public void registerListeners(String packageName) {
         Reflections ref = new Reflections(packageName);
         Set<Class<?>> classes =
                 ref.get(Scanners.SubTypes.of(Scanners.TypesAnnotated.with(RegisterPluginCommand.class)).asClass());
