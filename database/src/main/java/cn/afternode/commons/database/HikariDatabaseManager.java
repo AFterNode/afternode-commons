@@ -128,6 +128,12 @@ public class HikariDatabaseManager implements IDatabaseManager {
             return this;
         }
 
+        public Builder credentials(String username, String password) {
+            this.username = username;
+            this.password = password;
+            return this;
+        }
+
         public HikariDatabaseManager build() {
             if (url == null) throw new NullPointerException("JDBC url not present");
 
