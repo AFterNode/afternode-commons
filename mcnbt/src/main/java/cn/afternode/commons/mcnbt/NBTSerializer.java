@@ -29,17 +29,17 @@ public class NBTSerializer {
         if (nbt == null || object == null) throw new NullPointerException("nbt or object is null");
 
         Class<T> type = (Class<T>) object.getClass();
-        if (!type.isAnnotationPresent(SerializeNBT.SerializableNBT.class)) throw new IllegalArgumentException("%s has not SerializableNBT annotation".formatted(type.getName()));
+        if (!type.isAnnotationPresent(SerializableNBT.class)) throw new IllegalArgumentException("%s has not SerializableNBT annotation".formatted(type.getName()));
 
-        SerializeNBT.SerializableNBT serializeNBT = type.getAnnotation(SerializeNBT.SerializableNBT.class);
+        SerializableNBT serializeNBT = type.getAnnotation(SerializableNBT.class);
 
         ReadableNBT comp = nbt.getCompound(serializeNBT.value());
         if (comp == null) return;
 
         for (Field f: type.getDeclaredFields()) {
             try {
-                if (!f.isAnnotationPresent(SerializeNBT.SerializableNBT.class)) continue;
-                SerializeNBT.SerializableNBT n = f.getAnnotation(SerializeNBT.SerializableNBT.class);
+                if (!f.isAnnotationPresent(SerializableNBT.class)) continue;
+                SerializableNBT n = f.getAnnotation(SerializableNBT.class);
 
                 Class<?> fType = f.getType();
                 if (!comp.hasTag(n.value())) continue;
@@ -117,15 +117,15 @@ public class NBTSerializer {
         if (dest == null || obj == null) throw new NullPointerException("dest or obj is null");
 
         Class<?> objType = obj.getClass();
-        if (!objType.isAnnotationPresent(SerializeNBT.SerializableNBT.class)) throw new IllegalArgumentException("%s was not a serializable object".formatted(objType.getName()));
-        SerializeNBT.SerializableNBT serializableNBT = objType.getAnnotation(SerializeNBT.SerializableNBT.class);
+        if (!objType.isAnnotationPresent(SerializableNBT.class)) throw new IllegalArgumentException("%s was not a serializable object".formatted(objType.getName()));
+        SerializableNBT serializableNBT = objType.getAnnotation(SerializableNBT.class);
 
         ReadWriteNBT comp = dest.getOrCreateCompound(serializableNBT.value());
 
         for (Field f: objType.getDeclaredFields()) {
             try {
-                if (!f.isAnnotationPresent(SerializeNBT.SerializableNBT.class)) continue;
-                SerializeNBT.SerializableNBT anno = f.getAnnotation(SerializeNBT.SerializableNBT.class);
+                if (!f.isAnnotationPresent(SerializableNBT.class)) continue;
+                SerializableNBT anno = f.getAnnotation(SerializableNBT.class);
                 f.trySetAccessible();
 
                 Class<?> type = f.getType();
