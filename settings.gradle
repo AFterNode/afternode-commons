@@ -1,0 +1,4 @@
+rootProject.name = 'afternode-commons'
+include 'commons'
+include 'bukkit'
+

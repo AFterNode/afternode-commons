@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'cn.afternode'
+version = '1.0-SNAPSHOT'
+
+subprojects {
+    group = parent.group
+    version = parent.version
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
