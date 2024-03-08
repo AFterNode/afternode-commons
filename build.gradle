@@ -7,8 +7,27 @@ group = 'cn.afternode'
 version = '1.0-SNAPSHOT'
 
 subprojects {
+    apply plugin: "maven-publish"
+    apply plugin: "java"
+
     group = parent.group
     version = parent.version
+
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+
+    publishing {
+        publications {
+            maven (MavenPublication) {
+                group project.group
+                artifactId project.name
+                version project.version
+                from components.java
+            }
+        }
+    }
 }
 
 repositories {
