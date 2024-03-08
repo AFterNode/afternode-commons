@@ -26,6 +26,27 @@ subprojects {
                 artifactId "afternode-commons-${project.name}"
                 version project.version
                 from components.java
+
+                pom {
+                    licenses {
+                        license {
+                            name = "MIT License"
+                            url = "https://github.com/AFterNode/afternode-commons/blob/main/LICENSE"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = "h3xadecimal"
+                            name = "H3xadecimal"
+                            email = "h3xadecimal@afternode.cn"
+                        }
+                    }
+
+                    scm {
+                        url = "https://github.com/AFterNode/afternode-commons"
+                    }
+                }
             }
         }
 
