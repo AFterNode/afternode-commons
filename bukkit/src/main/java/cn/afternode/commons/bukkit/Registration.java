@@ -43,9 +43,9 @@ public class Registration {
         for (Class<?> c: classes) {
             try {
                 if (
-                        !c.isAssignableFrom(CommandExecutor.class)
-                                && !c.isAssignableFrom(TabCompleter.class)
-                                && !c.isAssignableFrom(TabExecutor.class)
+                        !CommandExecutor.class.isAssignableFrom(c)
+                                && !TabCompleter.class.isAssignableFrom(c)
+                                && !TabExecutor.class.isAssignableFrom(c)
                 ) throw new IllegalArgumentException("%s is not a valid CommandExecutor/TabExecutor but a RegisterPluginCommand annotation was present".formatted(c.getName()));
 
                 RegisterPluginCommand anno = c.getAnnotation(RegisterPluginCommand.class);
@@ -78,7 +78,7 @@ public class Registration {
 
         for (Class<?> c: classes) {
             try {
-                if (!c.isAssignableFrom(Listener.class))
+                if (!Listener.class.isAssignableFrom(c))
                     throw new IllegalArgumentException("%s is not assignable from org.bukkit.event.Listener".formatted(c.getName()));
 
                 RegisterListener anno = c.getAnnotation(RegisterListener.class);
