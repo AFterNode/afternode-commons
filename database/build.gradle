@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation project(":commons")
+
+    compileOnly 'com.zaxxer:HikariCP:5.1.0'
+    compileOnly 'com.h2database:h2:2.2.224'
+    compileOnly 'com.mysql:mysql-connector-j:8.3.0'
+    compileOnly 'com.google.code.gson:gson:2.10.1'
+}
+
+test {
+    useJUnitPlatform()
+}
