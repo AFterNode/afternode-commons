@@ -10,6 +10,7 @@ version = '1.3'
 subprojects {
     apply plugin: "maven-publish"
     apply plugin: "java"
+    apply plugin: "signing"
 
     group = parent.group
     version = parent.version
@@ -61,6 +62,10 @@ subprojects {
             }
         }
     }
+
+    signing {
+        sign configurations.archives
+    }
 }
 
 repositories {
@@ -74,8 +79,4 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-signing {
-    sign configurations.archives
 }
