@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'signing'
 }
 
 group = 'cn.afternode'
@@ -54,8 +55,8 @@ subprojects {
                 name = "OSSRH"
                 url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                 credentials {
-                    username = System.getenv("OSS_USERNAME")
-                    password = System.getenv("OSS_TOKEN")
+                    username = ossrhUsername
+                    password = ossrhPassword
                 }
             }
         }
@@ -73,4 +74,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+signing {
+    sign configurations.archives
 }
