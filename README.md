@@ -12,4 +12,22 @@ Utilities for Minecraft bukkit plugin (and more) developing
 
 # How to use
 
+## Stable releases
+
+**Maven**
+```xml
+<dependency>
+  <groupId>cn.afternode.commons</groupId>
+  <artifactId>MODULE</artifactId>
+  <version>VERSION</version>
+</dependency>
+```
+
+**Gradle**
+```groovy
+implementation "cn.afternode.commons:MODULE:VERSION"
+```
+
+## Snapshot releases
+
 See [JitPack](https://jitpack.io/#AFterNode/afternode-commons)
