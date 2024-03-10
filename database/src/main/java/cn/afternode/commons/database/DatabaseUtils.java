@@ -1,6 +1,7 @@
 package cn.afternode.commons.database;
 
 import cn.afternode.commons.database.annotations.SQLSerialization;
+import cn.afternode.commons.serialization.FieldAccessException;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayInputStream;
@@ -93,42 +94,48 @@ public class DatabaseUtils {
 
     /**
      * Fill SQL insert prepared statement with object
+     *
+     * @throws FieldAccessException Field access error
      */
-    public static void fillSQLInsert(Object obj, PreparedStatement stmt) throws IllegalAccessException, SQLException {
+    public static void fillSQLInsert(Object obj, PreparedStatement stmt) throws SQLException {
         int index = 1;
 
         for (Field f: obj.getClass().getFields()) {
             if (f.isAnnotationPresent(SQLSerialization.Column.class)) {
-                SQLSerialization.Column col = f.getAnnotation(SQLSerialization.Column.class);
+                try {
+                    SQLSerialization.Column col = f.getAnnotation(SQLSerialization.Column.class);
 
-                f.setAccessible(true);
-                Object fd = f.get(obj);
-                switch (col.type()) {
-                    case VARCHAR, TEXT -> stmt.setString(index, (String) fd);
-                    case INT -> stmt.setInt(index, (int) fd);
-                    case BIGINT -> stmt.setLong(index, (long) fd);
-                    case BLOB -> stmt.setBlob(index, new ByteArrayInputStream((byte[]) fd));
-                    case AUTO -> {
-                        if (col.asJson()) {
-                            stmt.setString(index, gson.toJson(fd));
-                        } else {
-                            Class<?> ft = f.getType();
-                            if (ft == String.class) {
-                                stmt.setString(index, (String) fd);
-                            } else if (ft == int.class || ft == Integer.class) {
-                                stmt.setInt(index, (int) fd);
-                            } else if (ft == long.class || ft == Long.class) {
-                                stmt.setLong(index, (long) fd);
-                            } else if (ft == byte[].class) {
-                                stmt.setBlob(index, new ByteArrayInputStream((byte[]) fd));
+                    f.setAccessible(true);
+                    Object fd = f.get(obj);
+                    switch (col.type()) {
+                        case VARCHAR, TEXT -> stmt.setString(index, (String) fd);
+                        case INT -> stmt.setInt(index, (int) fd);
+                        case BIGINT -> stmt.setLong(index, (long) fd);
+                        case BLOB -> stmt.setBlob(index, new ByteArrayInputStream((byte[]) fd));
+                        case AUTO -> {
+                            if (col.asJson()) {
+                                stmt.setString(index, gson.toJson(fd));
                             } else {
-                                throw new RuntimeException("Type %s was not supported for AUTO type".formatted(ft.getName()));
+                                Class<?> ft = f.getType();
+                                if (ft == String.class) {
+                                    stmt.setString(index, (String) fd);
+                                } else if (ft == int.class || ft == Integer.class) {
+                                    stmt.setInt(index, (int) fd);
+                                } else if (ft == long.class || ft == Long.class) {
+                                    stmt.setLong(index, (long) fd);
+                                } else if (ft == byte[].class) {
+                                    stmt.setBlob(index, new ByteArrayInputStream((byte[]) fd));
+                                } else {
+                                    throw new RuntimeException("Type %s was not supported for AUTO type".formatted(ft.getName()));
+                                }
                             }
                         }
                     }
-                }
 
-                index ++;
+                    index ++;
+                } catch (IllegalAccessException ex) {
+                    throw new FieldAccessException(f, ex);
+                }
             }
         }
     }

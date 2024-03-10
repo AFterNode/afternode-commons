@@ -1,5 +1,7 @@
 package cn.afternode.commons.mcnbt;
 
+import cn.afternode.commons.serialization.DeserializeInstantiationException;
+import cn.afternode.commons.serialization.FieldAccessException;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadableNBT;
 
@@ -74,8 +76,8 @@ public class NBTSerializer {
                         f.set(object, deserialize(nbt, fType));
                     }
                 }
-            } catch (Throwable t) {
-                throw new RuntimeException("Error in field %s".formatted(f.getName()), t);
+            } catch (IllegalAccessException t) {
+                throw new FieldAccessException(f, t);
             }
         }
     }
@@ -85,23 +87,24 @@ public class NBTSerializer {
      * @param nbt Source NBT
      * @param type Destination type
      * @return Destination object
-     * @throws NoSuchMethodException Reflection error
-     * @throws InvocationTargetException Reflection error
-     * @throws InstantiationException Reflection error
-     * @throws IllegalAccessException Reflection error
+     * @throws DeserializeInstantiationException Error in creating instant
      *
      * @see de.tr7zw.changeme.nbtapi.NBTType
      * @see #deserialize(ReadableNBT, Object)
      */
-    public static <T> T deserialize(ReadableNBT nbt, Class<T> type) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        Constructor<T> c = type.getDeclaredConstructor();
-        c.trySetAccessible();
-        T obj = c.newInstance();
+    public static <T> T deserialize(ReadableNBT nbt, Class<T> type) {
+        try {
+            Constructor<T> c = type.getDeclaredConstructor();
+            c.trySetAccessible();
+            T obj = c.newInstance();
 
-        if (nbt != null) {
-            deserialize(nbt, obj);
+            if (nbt != null) {
+                deserialize(nbt, obj);
+            }
+            return obj;
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex) {
+            throw new DeserializeInstantiationException("Type %s".formatted(type.getName()), ex);
         }
-        return obj;
     }
 
     /**
@@ -111,7 +114,7 @@ public class NBTSerializer {
      *
      * @throws NullPointerException dest or object is null
      * @throws IllegalArgumentException Annotation not present
-     * @throws RuntimeException Error in serialization
+     * @throws FieldAccessException Field access error
      */
     public static void serialize(ReadWriteNBT dest, Object obj) {
         if (dest == null || obj == null) throw new NullPointerException("dest or obj is null");
@@ -156,8 +159,8 @@ public class NBTSerializer {
                 } else {
                     serialize(comp, o);
                 }
-            } catch (Throwable t) {
-                throw new RuntimeException("Error in field %s".formatted(f.getName()), t);
+            } catch (IllegalAccessException t) {
+                throw new FieldAccessException(f, t);
             }
         }
     }
