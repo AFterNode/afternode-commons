@@ -1,22 +1,18 @@
 package cn.afternode.commons.bukkit;
 
-import cn.afternode.commons.Filter;
+import cn.afternode.commons.ReflectionError;
+import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
-import cn.afternode.commons.reflect.ReflectionUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.command.TabExecutor;
+import org.bukkit.command.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.security.ProtectionDomain;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 public class Registration {
@@ -61,6 +57,44 @@ public class Registration {
             } catch (Throwable t) {
                 throw new RuntimeException("Cannot register %s as a plugin command".formatted(c.getName()), t);
             }
+        }
+    }
+
+    /**
+     * Find classes with provided package name and register as Command, target class must extends org.bukkit.command.Command
+     * <br>
+     * This method will register commands through CommandMap
+     * @param packageName
+     * @see org.bukkit.command.CommandMap
+     * @see org.bukkit.command.Command
+     * @see cn.afternode.commons.bukkit.annotations.RegisterCommand
+     * @throws cn.afternode.commons.ReflectionError Error in reflections
+     */
+    public void registerCommands(String packageName) {
+        Reflections ref = new Reflections(packageName);
+        Set<Class<?>> classes =
+                ref.get(Scanners.SubTypes.of(Scanners.TypesAnnotated.with(RegisterCommand.class)).asClass());
+
+        SimpleCommandMap map = BukkitReflections.getCommandMap();
+
+        for (Class<?> c: classes) {
+            if (!Command.class.isAssignableFrom(c)) throw new IllegalArgumentException("%s is not a valid Command class but a RegisterCommand annotation was present".formatted(c.getName()));
+
+            Constructor<Command> cons;
+            try {
+                cons = (Constructor<Command>) c.getDeclaredConstructor();
+            } catch (NoSuchMethodException e){
+                throw new ReflectionError(c, e);
+            }
+            cons.trySetAccessible();
+            Command inst;
+            try {
+                inst = cons.newInstance();
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                throw new ReflectionError(cons, c, e);
+            }
+
+            map.register(plugin.getName(), inst);
         }
     }
 
