@@ -21,7 +21,8 @@ import java.net.URL
  * @param locale Localizations for localize()
  */
 class MessageBuilder(
-    private val locale: Localizations? = null
+    private val locale: Localizations? = null,
+    private val linePrefix: ComponentLike? = null
 ) {
     private val component = Component.text()
 
@@ -115,6 +116,11 @@ class MessageBuilder(
         val b = MessageBuilder()
         builder.invoke(b)
         return append(b)
+    }
+
+    fun line(): MessageBuilder {
+        component.appendNewline()
+        return this
     }
 
     fun build() = component.build()
@@ -218,8 +224,8 @@ class ClickBuilder {
  * Build Adventure component with MessageBuilder
  * @see cn.afternode.commons.bukkit.kotlin.MessageBuilder
  */
-fun message(block: MessageBuilder.() -> Unit, locale: Localizations? = null): Component {
-    val mb = MessageBuilder(locale)
+fun message(locale: Localizations? = null, linePrefix: ComponentLike?, block: MessageBuilder.() -> Unit): Component {
+    val mb = MessageBuilder(locale, linePrefix)
     block.invoke(mb)
     return mb.build()
 }
