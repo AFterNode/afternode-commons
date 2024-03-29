@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'cn.afternode.commons'
-version = '1.4'
+version = '1.5'
 
 subprojects {
     apply plugin: "maven-publish"
