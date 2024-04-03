@@ -7,6 +7,12 @@ plugins {
 group = 'cn.afternode.commons'
 version = '1.5'
 
+allprojects {
+    java.toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
 subprojects {
     apply plugin: "maven-publish"
     apply plugin: "java"
