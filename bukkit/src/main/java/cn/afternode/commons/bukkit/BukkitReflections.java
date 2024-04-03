@@ -20,7 +20,7 @@ public class BukkitReflections {
         } catch (NoSuchFieldException e) {
             throw new ReflectionError(SimplePluginManager.class, e);
         }
-        f.trySetAccessible();
+        f.setAccessible(true);
 
         try {
             return (SimpleCommandMap) f.get(Bukkit.getPluginManager());
