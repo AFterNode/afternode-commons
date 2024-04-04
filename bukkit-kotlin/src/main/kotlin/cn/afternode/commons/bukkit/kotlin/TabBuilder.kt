@@ -19,7 +19,7 @@ class TabBuilder {
         return this
     }
 
-    fun build() = list.toList()
+    fun build() = list.toMutableList()
 }
 
 fun tabComplete(block: TabBuilder.() -> Unit): List<String> {
