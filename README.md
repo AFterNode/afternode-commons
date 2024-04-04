@@ -6,6 +6,7 @@ Utilities for Minecraft bukkit plugin (and more) developing
 
 ## Modules
 - **bukkit**: Command/Events registration, configuration serializer/deserializer
+- - **bukkit-kotlin** Kotlin edition of bukkit module
 - **commons**: Reflections and misc
 - **database**: Database connection manager
 - **mcnbt**: NBT utilities using [Item-NBT-API](https://github.com/tr7zw/Item-NBT-API), serializer and deserializer
