@@ -109,6 +109,11 @@ class MessageBuilder(
         return this
     }
 
+    fun append(component: ComponentLike): MessageBuilder {
+        this.component.append(component)
+        return this
+    }
+
     /**
      * Append sub MessageBuilder
      */
@@ -120,6 +125,7 @@ class MessageBuilder(
 
     fun line(): MessageBuilder {
         component.appendNewline()
+        if (linePrefix != null) component.append(linePrefix)
         return this
     }
 
@@ -224,7 +230,7 @@ class ClickBuilder {
  * Build Adventure component with MessageBuilder
  * @see cn.afternode.commons.bukkit.kotlin.MessageBuilder
  */
-fun message(locale: Localizations? = null, linePrefix: ComponentLike?, block: MessageBuilder.() -> Unit): Component {
+fun message(locale: Localizations? = null, linePrefix: ComponentLike? = null, block: MessageBuilder.() -> Unit): Component {
     val mb = MessageBuilder(locale, linePrefix)
     block.invoke(mb)
     return mb.build()
