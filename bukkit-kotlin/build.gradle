@@ -2,9 +2,6 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.23'
 }
 
-group = 'cn.afternode.commons'
-version = '1.4'
-
 repositories {
     mavenCentral()
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
