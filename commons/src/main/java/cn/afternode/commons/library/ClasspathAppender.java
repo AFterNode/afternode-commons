@@ -31,7 +31,7 @@ public class ClasspathAppender {
     }
 
     /**
-     * Java 9+ AppClassLoader
+     * Append to Java 9+ AppClassLoader
      * @throws ReflectionError Unable to get ucp field
      * @throws RuntimeException addURL failed
      */
@@ -55,7 +55,14 @@ public class ClasspathAppender {
     }
 
     /**
-     * URLClassLoader
+     * Append to current AppClassLoader
+     */
+    public static void app(URL url) {
+        app(url, ClasspathAppender.class.getClassLoader());
+    }
+
+    /**
+     * Append to URLClassLoader
      */
     public static void ucl(URL url, URLClassLoader ldr) {
         Method md;
@@ -72,6 +79,13 @@ public class ClasspathAppender {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new ReflectionError(md, ldr.getClass(), e);
         }
+    }
+
+    /**
+     * Append to current URLClassLoader
+     */
+    public static void ucl(URL url) {
+        ucl(url, (URLClassLoader) ClasspathAppender.class.getClassLoader());
     }
 
     private static void addURL(ClassLoader ldr, Field ucpField, URL url) throws Throwable {
