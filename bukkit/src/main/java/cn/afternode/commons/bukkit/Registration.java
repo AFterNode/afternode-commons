@@ -61,7 +61,7 @@ public class Registration {
     }
 
     /**
-     * Find classes with provided package name and register as Command, target class must extends org.bukkit.command.Command
+     * Find classes with provided package name and register as Command, target class must extend org.bukkit.command.Command
      * <br>
      * This method will register commands through CommandMap
      * @param packageName

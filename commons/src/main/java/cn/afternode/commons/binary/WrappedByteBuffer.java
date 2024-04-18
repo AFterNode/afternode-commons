@@ -260,7 +260,7 @@ public class WrappedByteBuffer {
      * @param <T> Enum type
      */
     public <T extends Enum<T>> T readEnum(Class<T> type) {
-        T e = readEnum((Class<T>) type, this.readOff);
+        T e = readEnum(type, this.readOff);
         this.readOff += 2;
         return e;
     }

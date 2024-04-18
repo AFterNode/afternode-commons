@@ -132,7 +132,7 @@ class MessageBuilder(
     fun build() = component.build()
 }
 
-class HoverBuilder() {
+class HoverBuilder {
     private var event: HoverEvent<*>? = null
 
     /**
