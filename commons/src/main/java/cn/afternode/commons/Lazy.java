@@ -1,6 +1,5 @@
 package cn.afternode.commons;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Lazy<T> {
