@@ -11,7 +11,7 @@ public @interface BinarySerialize {
     /**
      * Version marker for binary deserialization
      * <br>
-     * If version mismatched, an error will be thrown
+     * If the version is mismatched, an error will be thrown
      * @return version
      */
     short version() default 0;

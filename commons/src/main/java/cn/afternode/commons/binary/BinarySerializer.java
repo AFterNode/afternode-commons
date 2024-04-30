@@ -9,9 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 
 public class BinarySerializer {
     /**
-     * Serialize object to WrappedByteBuffer
+     * Serialize an object to WrappedByteBuffer
      * <br>
-     * Currently, supports String, int, short and enum
+     * Currently, it supports String, int, short and enum
      * <br>
      * Write collections may cause errors in deserialization
      * @param obj Source object
@@ -58,7 +58,7 @@ public class BinarySerializer {
     }
 
     /**
-     * Serialize object to WrappedByteBuffer with default size
+     * Serialize an object to WrappedByteBuffer with default size
      * @param obj Source object
      * @return Serialized
      * @see #serialize(Object, int)

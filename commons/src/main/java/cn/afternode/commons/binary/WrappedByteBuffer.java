@@ -268,7 +268,7 @@ public class WrappedByteBuffer {
     /**
      * Try to read enum
      * @param type Enum type
-     * @return Result enum, or null if type is not represent an enum class
+     * @return Result enum, or null if the type is not representing an enum class
      * @param <T> Enum type
      */
     public <T> T tryReadEnum(Class<T> type) {

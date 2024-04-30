@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker for serializable NBT object
+ * Marker for the serializable NBT object
  */
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

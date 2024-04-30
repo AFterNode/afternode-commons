@@ -14,15 +14,15 @@ public class NBTSerializer {
     /**
      * Deserialize ReadableNBT to an object
      * <br>
-     * If base compound not exists, nothing will be changed
+     * If the base compound does not exist, nothing will be changed
      * <br>
      * Currently, lists are not supported
      *
      * @param nbt Source NBT
-     * @param object Destination object, must have SerializableNBT annotation present
+     * @param object Destination object must have SerializableNBT annotation present
      *
      * @throws NullPointerException NBT or object is null
-     * @throws IllegalArgumentException Annotation not present
+     * @throws IllegalArgumentException Annotation doesn't present
      * @throws RuntimeException Error in deserialization
      *
      * @see de.tr7zw.changeme.nbtapi.NBTType
@@ -113,7 +113,7 @@ public class NBTSerializer {
      * @param obj Source object
      *
      * @throws NullPointerException dest or object is null
-     * @throws IllegalArgumentException Annotation not present
+     * @throws IllegalArgumentException Annotation doesn't present
      * @throws FieldAccessException Field access error
      */
     public static void serialize(ReadWriteNBT dest, Object obj) {
