@@ -1,8 +1,11 @@
 package cn.afternode.commons.bukkit.kotlin
 
 import org.bukkit.Bukkit
+import org.bukkit.command.CommandSender
+import org.bukkit.permissions.Permission
 
 class TabBuilder(
+    val sender: CommandSender? = null,
     val ignoreCase: Boolean = false
 ) {
     private val list = ArrayList<String>()
@@ -34,11 +37,35 @@ class TabBuilder(
         return this
     }
 
+    /**
+     * Add completions if sender has specified permission
+     * @param permission Target permission
+     * @param items Items to add
+     * @see sender
+     */
+    fun permission(permission: String, vararg items: String): TabBuilder {
+        if (sender?.hasPermission(permission) ?: throw NullPointerException("No sender provided"))
+            list.addAll(items)
+        return this
+    }
+
+    /**
+     * Add completions if sender has specified permission
+     * @param permission Target permission
+     * @param items Items to add
+     * @see sender
+     */
+    fun permission(permission: Permission, vararg items: String): TabBuilder {
+        if (sender?.hasPermission(permission) ?: throw NullPointerException("No sender provided"))
+            list.addAll(items)
+        return this
+    }
+
     fun build() = list.toMutableList()
 }
 
-fun tabComplete(block: TabBuilder.() -> Unit): MutableList<String> {
-    val builder = TabBuilder()
+fun tabComplete(sender: CommandSender? = null, ignoreCase: Boolean = false, block: TabBuilder.() -> Unit): MutableList<String> {
+    val builder = TabBuilder(sender, ignoreCase)
     block(builder)
     return builder.build()
 }
