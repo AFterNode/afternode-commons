@@ -27,6 +27,10 @@ class MessageBuilder(
 ) {
     private val component = Component.text()
 
+    init {
+        linePrefix?.let { append(linePrefix) }
+    }
+
     /**
      * Append localized string
      *
