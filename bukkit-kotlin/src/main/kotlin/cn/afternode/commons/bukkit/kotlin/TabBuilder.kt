@@ -37,7 +37,7 @@ class TabBuilder(
     fun build() = list.toMutableList()
 }
 
-fun tabComplete(block: TabBuilder.() -> Unit): List<String> {
+fun tabComplete(block: TabBuilder.() -> Unit): MutableList<String> {
     val builder = TabBuilder()
     block(builder)
     return builder.build()
