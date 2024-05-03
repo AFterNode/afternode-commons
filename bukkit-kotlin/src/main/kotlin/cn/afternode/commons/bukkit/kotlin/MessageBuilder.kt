@@ -23,12 +23,12 @@ import java.net.URL
  */
 class MessageBuilder(
     private val locale: Localizations? = null,
-    private val linePrefix: ComponentLike? = null
+    private val linePrefix: ComponentLike = Component.empty()
 ) {
     private val component = Component.text()
 
     init {
-        linePrefix?.let { append(linePrefix) }
+        append(linePrefix)
     }
 
     /**
@@ -133,7 +133,15 @@ class MessageBuilder(
      */
     fun line(): MessageBuilder {
         component.appendNewline()
-        if (linePrefix != null) component.append(linePrefix)
+        component.append(linePrefix)
+        return this
+    }
+
+    /**
+     * Append empty line
+     */
+    fun emptyLine(): MessageBuilder {
+        component.appendNewline()
         return this
     }
 
@@ -264,7 +272,7 @@ class ClickBuilder {
  * Build Adventure component with MessageBuilder
  * @see cn.afternode.commons.bukkit.kotlin.MessageBuilder
  */
-fun message(locale: Localizations? = null, linePrefix: ComponentLike? = null, block: MessageBuilder.() -> Unit): Component {
+fun message(locale: Localizations? = null, linePrefix: ComponentLike = Component.empty(), block: MessageBuilder.() -> Unit): Component {
     val mb = MessageBuilder(locale, linePrefix)
     block.invoke(mb)
     return mb.build()
