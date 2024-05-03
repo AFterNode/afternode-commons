@@ -43,9 +43,9 @@ class TabBuilder(
      * @param items Items to add
      * @see sender
      */
-    fun permission(permission: String, vararg items: String): TabBuilder {
+    fun permission(permission: String, vararg items: String, prefix: String = ""): TabBuilder {
         if (sender?.hasPermission(permission) ?: throw NullPointerException("No sender provided"))
-            list.addAll(items)
+            add(*items, prefix)
         return this
     }
 
@@ -55,9 +55,9 @@ class TabBuilder(
      * @param items Items to add
      * @see sender
      */
-    fun permission(permission: Permission, vararg items: String): TabBuilder {
+    fun permission(permission: Permission, vararg items: String, prefix: String = ""): TabBuilder {
         if (sender?.hasPermission(permission) ?: throw NullPointerException("No sender provided"))
-            list.addAll(items)
+            add(*items, prefix)
         return this
     }
 
