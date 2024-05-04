@@ -66,8 +66,8 @@ subprojects {
                 name = "OSSRH"
                 url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                 credentials {
-                    username = getProperty("ossrhUsername")
-                    password = getProperty("ossrhPassword")
+                    username = hasProperty("ossrhUsername") ? getProperty("ossrhUsername") : "NONE"
+                    password = hasProperty("ossrhPassword") ? getProperty("ossrhPassword") : "NONE"
                 }
             }
         }
