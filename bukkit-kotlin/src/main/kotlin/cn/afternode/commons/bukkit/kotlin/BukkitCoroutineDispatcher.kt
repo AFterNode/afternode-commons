@@ -1,8 +1,6 @@
 package cn.afternode.commons.bukkit.kotlin
 
-import kotlinx.coroutines.CancellableContinuation
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.*
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitScheduler
@@ -19,3 +17,4 @@ class BukkitCoroutineDispatcher(private val plugin: Plugin): CoroutineDispatcher
 }
 
 fun BukkitScheduler.asCoroutineDispatcher(plugin: Plugin): CoroutineDispatcher = BukkitCoroutineDispatcher(plugin)
+fun BukkitScheduler.coroutineLaunch(plugin: Plugin, block: suspend CoroutineScope.() -> Unit): Job = CoroutineScope(asCoroutineDispatcher(plugin)).launch(block = block)
