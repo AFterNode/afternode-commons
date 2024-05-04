@@ -11,6 +11,7 @@ import net.kyori.adventure.text.event.HoverEventSource
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.command.CommandSender
+import org.bukkit.permissions.Permission
 import java.awt.Color
 import java.net.URL
 
@@ -152,11 +153,7 @@ class MessageBuilder(
      * @param block Message builder
      */
     fun permission(sender: CommandSender, permission: String, block: MessageBuilder.() -> Unit): MessageBuilder {
-        if (sender.hasPermission(permission)) {
-            val mb = MessageBuilder()
-            block(mb)
-            this.append(mb.build())
-        }
+        if (sender.hasPermission(permission)) this.sub(block)
         return this
     }
 
@@ -167,6 +164,28 @@ class MessageBuilder(
      * @param component Component to append
      */
     fun permission(sender: CommandSender, permission: String, component: ComponentLike): MessageBuilder {
+        if (sender.hasPermission(permission)) this.append(component)
+        return this
+    }
+
+    /**
+     * Append component if the sender has specified permission
+     * @param sender Message sender
+     * @param permission Target permission
+     * @param block Message builder
+     */
+    fun permission(sender: CommandSender, permission: Permission, block: MessageBuilder.() -> Unit): MessageBuilder {
+        if (sender.hasPermission(permission)) this.sub(block)
+        return this
+    }
+
+    /**
+     * Append component if the sender has specified permission
+     * @param sender Message sender
+     * @param permission Target permission
+     * @param component Component to append
+     */
+    fun permission(sender: CommandSender, permission: Permission, component: ComponentLike): MessageBuilder {
         if (sender.hasPermission(permission)) this.append(component)
         return this
     }
