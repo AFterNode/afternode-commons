@@ -14,7 +14,7 @@ dependencies {
     compileOnly "net.kyori:adventure-api:4.16.0"
     compileOnly "net.kyori:adventure-text-minimessage:4.16.0"
 
-    compileOnly 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1-Beta'
+    compileOnly 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
 
     compileOnly project(":commons")
     implementation project(":bukkit")
