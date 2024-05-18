@@ -64,7 +64,19 @@ class TabBuilder(
     fun build() = list.toMutableList()
 }
 
-fun tabComplete(sender: CommandSender? = null, ignoreCase: Boolean = false, block: TabBuilder.() -> Unit): MutableList<String> {
+/**
+ * Create command suggestion
+ *
+ * Moved
+ * @see commandSuggestion
+ */
+@Deprecated("Moved", ReplaceWith("commandSuggestion(sender, ignoreCase, block)"))
+fun tabComplete(sender: CommandSender? = null, ignoreCase: Boolean = false, block: TabBuilder.() -> Unit): MutableList<String> = commandSuggestion(sender, ignoreCase, block)
+
+/**
+ * Create command suggestion (Tab completion)
+ */
+fun commandSuggestion(sender: CommandSender? = null, ignoreCase: Boolean = false, block: TabBuilder.() -> Unit): MutableList<String> {
     val builder = TabBuilder(sender, ignoreCase)
     block(builder)
     return builder.build()
