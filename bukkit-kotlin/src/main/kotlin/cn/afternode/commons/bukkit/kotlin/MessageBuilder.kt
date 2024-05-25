@@ -298,6 +298,11 @@ fun message(locale: Localizations? = null, linePrefix: ComponentLike = Component
 }
 
 /**
+ * Build Adventure component with MessageBuilder (without Localizations)
+ */
+fun message(linePrefix: ComponentLike = Component.empty(), block: MessageBuilder.() -> Unit) = message(locale = null, linePrefix = linePrefix, block = block)
+
+/**
  * Build Adventure component with TextComponent.Builder
  * @see net.kyori.adventure.text.TextComponent.Builder
  */
