@@ -61,6 +61,24 @@ class TabBuilder(
         return this
     }
 
+    /**
+     * Remove completions if not has prefix
+     * @param prefix Target prefix
+     */
+    fun filter(prefix: String): TabBuilder {
+        list.removeIf { !it.startsWith(prefix, ignoreCase) }
+        return this
+    }
+
+    /**
+     * Call removeIf on completions
+     * @param filter Prediction
+     */
+    fun filter(filter: (String) -> Boolean): TabBuilder {
+        list.removeIf(filter)
+        return this
+    }
+
     fun build() = list.toMutableList()
 }
 
