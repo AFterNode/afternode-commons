@@ -11,7 +11,7 @@ import java.util.Properties;
  *
  * @see Properties
  */
-public class Localizations {
+public class Localizations implements ILocalizations {
     private final String prefix;
     private final Properties prop = new Properties();
     private final ClassLoader loader;

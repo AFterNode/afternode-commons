@@ -1,6 +1,6 @@
 package cn.afternode.commons.bukkit.kotlin
 
-import cn.afternode.commons.Localizations
+import cn.afternode.commons.ILocalizations
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.ComponentLike
@@ -23,7 +23,7 @@ import java.net.URL
  * @param locale Localizations for localize()
  */
 class MessageBuilder(
-    private val locale: Localizations? = null,
+    private val locale: ILocalizations? = null,
     private val linePrefix: ComponentLike = Component.empty()
 ) {
     private val component = Component.text()
@@ -37,7 +37,7 @@ class MessageBuilder(
      *
      * Requires locale object provided
      *
-     * @see Localizations
+     * @see ILocalizations
      */
     fun localize(key: String, vararg p: Pair<String, Any>): MessageBuilder {
         component.append(Component.text(locale?.get(key, mapOf(*p)) ?: throw NullPointerException("No localizations provided")))
@@ -291,7 +291,7 @@ class ClickBuilder {
  * Build Adventure component with MessageBuilder
  * @see cn.afternode.commons.bukkit.kotlin.MessageBuilder
  */
-fun message(locale: Localizations? = null, linePrefix: ComponentLike = Component.empty(), block: MessageBuilder.() -> Unit): Component {
+fun message(locale: ILocalizations? = null, linePrefix: ComponentLike = Component.empty(), block: MessageBuilder.() -> Unit): Component {
     val mb = MessageBuilder(locale, linePrefix)
     block.invoke(mb)
     return mb.build()
