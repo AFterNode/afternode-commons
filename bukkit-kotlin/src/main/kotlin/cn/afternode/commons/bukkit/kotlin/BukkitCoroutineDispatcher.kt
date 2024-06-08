@@ -8,6 +8,7 @@ import kotlin.coroutines.CoroutineContext
 
 /**
  * Kotlin coroutine dispatcher for Bukkit scheduler
+ *
  * Requires org.jetbrains.kotlinx:kotlinx-coroutines-core
  */
 class BukkitCoroutineDispatcher(private val plugin: Plugin): CoroutineDispatcher() {
