@@ -1,6 +1,4 @@
-package cn.afternode.commons;
-
-import cn.afternode.commons.localizations.ILocalizations;
+package cn.afternode.commons.localizations;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,12 +8,10 @@ import java.util.Properties;
 
 /**
  * Localizations provider with properties format
+ *
  * @see Properties
- * @see cn.afternode.commons.localizations.MultiLanguageLocalization
- * @deprecated Moved
  */
-@Deprecated(since = "1.9")
-public class Localizations implements ILocalizations {
+public class MultiLanguageLocalization implements ILocalizations {
     private final String prefix;
     private final Properties prop = new Properties();
     private final ClassLoader loader;
@@ -25,7 +21,7 @@ public class Localizations implements ILocalizations {
      * @param prefix Resource name prefix
      * @param loader ClassLoader for getResourceAsStream
      */
-    public Localizations(String prefix, ClassLoader loader) {
+    public MultiLanguageLocalization(String prefix, ClassLoader loader) {
         this.prefix = prefix;
         this.loader = loader;
     }
@@ -37,9 +33,9 @@ public class Localizations implements ILocalizations {
      * @param defaultId Default localizations ID
      * @throws IOException Error in Properties.load
      * @see #loadLocalizations(String)
-     * @see #Localizations(String, ClassLoader)
+     * @see #MultiLanguageLocalization(String, ClassLoader)
      */
-    public Localizations(String prefix, ClassLoader loader, String defaultId) throws IOException {
+    public MultiLanguageLocalization(String prefix, ClassLoader loader, String defaultId) throws IOException {
         this(prefix, loader);
         loadLocalizations(defaultId);
     }

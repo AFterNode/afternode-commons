@@ -1,4 +1,4 @@
-package cn.afternode.commons;
+package cn.afternode.commons.localizations;
 
 import java.util.Map;
 

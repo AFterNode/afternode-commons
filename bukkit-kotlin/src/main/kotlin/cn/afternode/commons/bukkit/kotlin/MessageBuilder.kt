@@ -1,6 +1,6 @@
 package cn.afternode.commons.bukkit.kotlin
 
-import cn.afternode.commons.ILocalizations
+import cn.afternode.commons.localizations.ILocalizations
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.ComponentLike
