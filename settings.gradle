@@ -5,7 +5,6 @@ plugins {
 rootProject.name = 'afternode-commons'
 include 'commons'
 include 'bukkit'
-include 'database'
 include 'mcnbt'
 include 'bukkit-kotlin'
 
