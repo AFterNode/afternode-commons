@@ -124,7 +124,7 @@ class MessageBuilder(
      * Append sub MessageBuilder
      */
     fun sub(builder: MessageBuilder.() -> Unit): MessageBuilder {
-        val b = MessageBuilder()
+        val b = MessageBuilder(linePrefix = linePrefix)
         builder.invoke(b)
         return append(b)
     }
