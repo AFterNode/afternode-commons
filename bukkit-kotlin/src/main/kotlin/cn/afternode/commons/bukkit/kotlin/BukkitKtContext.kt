@@ -2,7 +2,6 @@ package cn.afternode.commons.bukkit.kotlin
 
 import cn.afternode.commons.localizations.ILocalizations
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.ComponentLike
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.Plugin
 
