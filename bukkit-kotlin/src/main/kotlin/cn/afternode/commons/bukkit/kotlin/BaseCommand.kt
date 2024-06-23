@@ -1,10 +1,8 @@
 package cn.afternode.commons.bukkit.kotlin
 
 import cn.afternode.commons.bukkit.BukkitReflections
-import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
-import org.bukkit.plugin.Plugin
 
 abstract class BaseCommand(
     name: String,

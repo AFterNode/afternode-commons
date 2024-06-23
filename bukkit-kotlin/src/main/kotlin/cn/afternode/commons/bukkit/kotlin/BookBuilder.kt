@@ -3,6 +3,9 @@ package cn.afternode.commons.bukkit.kotlin
 import cn.afternode.commons.localizations.ILocalizations
 import net.kyori.adventure.inventory.Book
 
+/**
+ * @param locale Localizations instance for create MessageBuilder
+ */
 class BookBuilder(
     private val locale: ILocalizations? = null
 ) {
@@ -76,6 +79,9 @@ class BookBuilder(
     fun build() = Book.book(title.build(), author.build(), pages.map { it.build() })
 }
 
+/**
+ * Create book
+ */
 fun book(locale: ILocalizations? = null, block: BookBuilder.() -> Unit): Book {
     val builder = BookBuilder(locale)
     block(builder)
