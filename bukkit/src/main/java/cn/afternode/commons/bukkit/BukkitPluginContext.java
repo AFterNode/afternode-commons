@@ -4,32 +4,27 @@ import cn.afternode.commons.ReflectionError;
 import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
+import cn.afternode.commons.serialization.FieldAccessException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
-/**
- * @deprecated Use BukkitPluginContext
- * @see BukkitPluginContext
- */
-@Deprecated(
-        forRemoval = true
-)
-public class Registration {
+public class BukkitPluginContext {
     private final Plugin plugin;
 
     /**
      * @param plg Plugin instance will be used in registrations
      */
-    @Deprecated(forRemoval = true)
-    public Registration(Plugin plg) {
+    public BukkitPluginContext(Plugin plg) {
         this.plugin = plg;
     }
 
@@ -39,7 +34,6 @@ public class Registration {
      * @throws RuntimeException Not a valid CommandExecutor/TabExecutor; Unable to create instance
      * @see RegisterPluginCommand
      */
-    @Deprecated(forRemoval = true)
     public void registerPluginCommands(String packageName) throws RuntimeException {
         Reflections ref = new Reflections(packageName);
         Set<Class<?>> classes =
@@ -73,13 +67,12 @@ public class Registration {
      * Find classes with provided package name and register as Command, target class must extend org.bukkit.command.Command
      * <br>
      * This method will register commands through CommandMap
-     * @param packageName
-     * @see org.bukkit.command.CommandMap
-     * @see org.bukkit.command.Command
-     * @see cn.afternode.commons.bukkit.annotations.RegisterCommand
-     * @throws cn.afternode.commons.ReflectionError Error in reflections
+     * @param packageName Package name for scanning
+     * @see CommandMap
+     * @see Command
+     * @see RegisterCommand
+     * @throws ReflectionError Error in reflections
      */
-    @Deprecated(forRemoval = true)
     public void registerCommands(String packageName) {
         Reflections ref = new Reflections(packageName);
         Set<Class<?>> classes =
@@ -113,7 +106,6 @@ public class Registration {
      * @param packageName Target package name
      * @see RegisterListener
      */
-    @Deprecated(forRemoval = true)
     public void registerListeners(String packageName) {
         Reflections ref = new Reflections(packageName);
         Set<Class<?>> classes =
@@ -123,8 +115,6 @@ public class Registration {
             try {
                 if (!Listener.class.isAssignableFrom(c))
                     throw new IllegalArgumentException("%s is not assignable from org.bukkit.event.Listener".formatted(c.getName()));
-
-                RegisterListener anno = c.getAnnotation(RegisterListener.class);
 
                 Constructor<? extends Listener> constructor = (Constructor<? extends Listener>) c.getDeclaredConstructor();
                 constructor.setAccessible(true);
@@ -136,7 +126,24 @@ public class Registration {
         }
     }
 
-    @Deprecated(forRemoval = true)
+    /**
+     * Set plugin display name
+     * @param name Target name
+     * @see PluginDescriptionFile#name
+     */
+    public void setDisplayName(String name) {
+        Field field = null;
+        try {
+            field = PluginDescriptionFile.class.getDeclaredField("name");
+            field.trySetAccessible();
+            field.set(plugin.getDescription(), name);
+        } catch (NoSuchFieldException e) {
+            throw new ReflectionError(PluginDescriptionFile.class, e);
+        } catch (IllegalAccessException e) {
+            throw new FieldAccessException(field, e);
+        }
+    }
+
     public Plugin getPlugin() {
         return plugin;
     }
