@@ -24,7 +24,8 @@ import java.net.URL
  */
 class MessageBuilder(
     private val locale: ILocalizations? = null,
-    private val linePrefix: ComponentLike = Component.empty()
+    private val linePrefix: ComponentLike = Component.empty(),
+    private val sender: CommandSender? = null
 ) {
     private val component = Component.text()
 
@@ -158,6 +159,13 @@ class MessageBuilder(
     }
 
     /**
+     * Append component if sender of this builder has specified permission
+     * @param permission Target permission
+     * @param block Message builder
+     */
+    fun permission(permission: String, block: MessageBuilder.() -> Unit): MessageBuilder = this.permission(this.sender ?: throw NullPointerException("No CommandSender passed to this builder"), permission, block)
+
+    /**
      * Append component if the sender has specified permission
      * @param sender Message sender
      * @param permission Target permission
@@ -167,6 +175,13 @@ class MessageBuilder(
         if (sender.hasPermission(permission)) this.append(component)
         return this
     }
+
+    /**
+     * Append component if sender of this builder has specified permission
+     * @param permission Target permission
+     * @param component Component to append
+     */
+    fun permission(permission: String, component: ComponentLike): MessageBuilder = this.permission(this.sender ?: throw NullPointerException("No CommandSender passed to this builder"), permission, component)
 
     /**
      * Append component if the sender has specified permission
@@ -180,6 +195,13 @@ class MessageBuilder(
     }
 
     /**
+     * Append component if sender of this builder has specified permission
+     * @param permission Target permission
+     * @param block Message builder
+     */
+    fun permission(permission: Permission, block: MessageBuilder.() -> Unit): MessageBuilder = this.permission(this.sender ?: throw NullPointerException("No CommandSender passed to this builder"), permission, block)
+
+    /**
      * Append component if the sender has specified permission
      * @param sender Message sender
      * @param permission Target permission
@@ -189,6 +211,13 @@ class MessageBuilder(
         if (sender.hasPermission(permission)) this.append(component)
         return this
     }
+
+    /**
+     * Append component if sender of this builder has specified permission
+     * @param permission Target permission
+     * @param component Component to append
+     */
+    fun permission(permission: Permission, component: ComponentLike): MessageBuilder = this.permission(this.sender ?: throw NullPointerException("No CommandSender passed to this builder"), permission, component)
 
     fun build() = component.build()
 }
@@ -291,8 +320,8 @@ class ClickBuilder {
  * Build Adventure component with MessageBuilder
  * @see cn.afternode.commons.bukkit.kotlin.MessageBuilder
  */
-fun message(locale: ILocalizations? = null, linePrefix: ComponentLike = Component.empty(), block: MessageBuilder.() -> Unit): Component {
-    val mb = MessageBuilder(locale, linePrefix)
+fun message(locale: ILocalizations? = null, linePrefix: ComponentLike = Component.empty(), sender: CommandSender? = null, block: MessageBuilder.() -> Unit): Component {
+    val mb = MessageBuilder(locale, linePrefix, sender)
     block.invoke(mb)
     return mb.build()
 }
@@ -300,7 +329,7 @@ fun message(locale: ILocalizations? = null, linePrefix: ComponentLike = Componen
 /**
  * Build Adventure component with MessageBuilder (without Localizations)
  */
-fun message(linePrefix: ComponentLike = Component.empty(), block: MessageBuilder.() -> Unit) = message(locale = null, linePrefix = linePrefix, block = block)
+fun message(linePrefix: ComponentLike = Component.empty(), sender: CommandSender? = null, block: MessageBuilder.() -> Unit) = message(locale = null, linePrefix = linePrefix, sender = sender, block = block)
 
 /**
  * Build Adventure component with TextComponent.Builder

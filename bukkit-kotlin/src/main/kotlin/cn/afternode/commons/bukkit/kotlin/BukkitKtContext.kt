@@ -33,5 +33,5 @@ class BukkitKtContext(val plugin: Plugin) {
      * @see BukkitKtContext.localization
      * @see MessageBuilder
      */
-    fun message(block: MessageBuilder.() -> Unit) = message(linePrefix = messageLinePrefix, locale = localization, block = block)
+    fun message(sender: CommandSender? = null, block: MessageBuilder.() -> Unit) = message(linePrefix = messageLinePrefix, sender = sender, locale = localization, block = block)
 }
