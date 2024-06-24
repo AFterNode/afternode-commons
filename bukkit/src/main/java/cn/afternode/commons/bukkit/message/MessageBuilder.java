@@ -4,6 +4,7 @@ import cn.afternode.commons.localizations.ILocalizations;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -60,6 +61,11 @@ public class MessageBuilder {
         return this;
     }
 
+    public MessageBuilder click(ClickEvent event) {
+        this.component.clickEvent(event);
+        return this;
+    }
+
     public MessageBuilder append(ComponentLike componentLike) {
         this.component.append(componentLike);
         return this;
@@ -90,5 +96,27 @@ public class MessageBuilder {
 
     public TextComponent build() {
         return this.component.build();
+    }
+
+    public void send() {
+        if (this.sender == null)
+            throw new NullPointerException("No sender passed to this builder");
+        this.sender.sendMessage(this.build());
+    }
+
+    public void send(CommandSender sender) {
+        sender.sendMessage(this.build());
+    }
+
+    public ILocalizations getLocalizations() {
+        return localizations;
+    }
+
+    public ComponentLike getLinePrefix() {
+        return linePrefix;
+    }
+
+    public CommandSender getSender() {
+        return sender;
     }
 }
