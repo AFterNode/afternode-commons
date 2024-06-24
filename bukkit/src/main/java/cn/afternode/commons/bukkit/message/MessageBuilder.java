@@ -16,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public class MessageBuilder {
-    private final ILocalizations localizations;
+    private ILocalizations localizations;
     private ComponentLike linePrefix = Component.text();
-    private final CommandSender sender;
+    private CommandSender sender;
 
     private final TextComponent.Builder component = Component.text();
 
@@ -32,6 +32,14 @@ public class MessageBuilder {
         this.sender = sender;
 
         component.append(this.linePrefix);
+    }
+
+    public MessageBuilder(@Nullable ILocalizations locale) {
+        this(locale, null, null);
+    }
+
+    public MessageBuilder() {
+        this(null, null, null);
     }
 
     public MessageBuilder localize(String key, Map<String, Object> placeholders) {
@@ -112,11 +120,26 @@ public class MessageBuilder {
         return localizations;
     }
 
+    public MessageBuilder localizations(ILocalizations localizations) {
+        this.localizations = localizations;
+        return this;
+    }
+
     public ComponentLike getLinePrefix() {
         return linePrefix;
     }
 
+    public MessageBuilder linePrefix(ComponentLike prefix) {
+        this.linePrefix = prefix;
+        return this;
+    }
+
     public CommandSender getSender() {
         return sender;
+    }
+
+    public MessageBuilder sender(CommandSender sender) {
+        this.sender = sender;
+        return this;
     }
 }
