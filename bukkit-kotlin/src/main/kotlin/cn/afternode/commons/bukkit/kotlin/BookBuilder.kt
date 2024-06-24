@@ -1,5 +1,6 @@
 package cn.afternode.commons.bukkit.kotlin
 
+import cn.afternode.commons.bukkit.message.MessageBuilder
 import cn.afternode.commons.localizations.ILocalizations
 import net.kyori.adventure.inventory.Book
 

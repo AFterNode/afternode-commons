@@ -1,5 +1,7 @@
 package cn.afternode.commons.bukkit.kotlin
 
+import cn.afternode.commons.bukkit.message.MessageBuilder
+import cn.afternode.commons.bukkit.message.TabBuilder
 import cn.afternode.commons.localizations.ILocalizations
 import net.kyori.adventure.text.Component
 import org.bukkit.command.CommandSender
@@ -25,7 +27,7 @@ class BukkitKtContext(val plugin: Plugin) {
      * @see commandSuggestion
      */
     fun tab(sender: CommandSender? = null, ignoreCase: Boolean = false, block: TabBuilder.() -> Unit) =
-        commandSuggestion(sender, ignoreCase, block)
+        commandSuggestion(sender, block)
 
     /**
      * Wrapped message builder using linePrefix and localizations in current context
