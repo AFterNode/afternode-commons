@@ -10,9 +10,7 @@ repositories {
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 
-    compileOnlyApi "io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT"
-    compileOnly "net.kyori:adventure-api:4.17.0"
-    compileOnly "net.kyori:adventure-text-minimessage:4.17.0"
+    compileOnlyApi libs.paper.api
 
     api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1'
 
