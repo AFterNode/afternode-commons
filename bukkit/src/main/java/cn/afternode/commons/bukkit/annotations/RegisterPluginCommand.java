@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation for registerPluginCommands
- * @see cn.afternode.commons.bukkit.Registration#registerPluginCommands(String)
+ * @see cn.afternode.commons.bukkit.BukkitPluginContext#registerPluginCommands(String)
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

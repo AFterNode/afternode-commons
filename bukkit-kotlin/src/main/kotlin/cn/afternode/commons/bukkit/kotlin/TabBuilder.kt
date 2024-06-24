@@ -83,15 +83,6 @@ class TabBuilder(
 }
 
 /**
- * Create command suggestion
- *
- * Moved
- * @see commandSuggestion
- */
-@Deprecated("Moved", ReplaceWith("commandSuggestion(sender, ignoreCase, block)"))
-fun tabComplete(sender: CommandSender? = null, ignoreCase: Boolean = false, block: TabBuilder.() -> Unit): MutableList<String> = commandSuggestion(sender, ignoreCase, block)
-
-/**
  * Create command suggestion (Tab completion)
  */
 fun commandSuggestion(sender: CommandSender? = null, ignoreCase: Boolean = false, block: TabBuilder.() -> Unit): MutableList<String> {

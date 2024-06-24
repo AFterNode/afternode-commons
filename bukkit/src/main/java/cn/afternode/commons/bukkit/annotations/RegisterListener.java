@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation for registerListeners
- * @see cn.afternode.commons.bukkit.Registration
+ * @see cn.afternode.commons.bukkit.BukkitPluginContext#registerListeners(String)
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
