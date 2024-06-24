@@ -22,6 +22,7 @@ import java.net.URL
  *
  * @param locale Localizations for localize()
  */
+@Deprecated(message = "Moved to Java")
 class MessageBuilder(
     private val locale: ILocalizations? = null,
     private val linePrefix: ComponentLike = Component.empty(),
