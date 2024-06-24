@@ -4,14 +4,14 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url "https://repo.papermc.io/repository/maven-public/" }
 }
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
-    compileOnly "org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT"
+    compileOnlyApi "io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT"
 
     api project(":commons")
     compileOnly 'org.reflections:reflections:0.10.2'
