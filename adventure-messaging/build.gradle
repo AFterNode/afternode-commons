@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly libs.advntr.api
+}
+
+test {
+    useJUnitPlatform()
+}
