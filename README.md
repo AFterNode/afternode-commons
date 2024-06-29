@@ -8,12 +8,12 @@ Utilities for Minecraft bukkit plugin (and more) developing
 - **bukkit**: Command/Events registration, configuration serializer/deserializer
 - - **bukkit-kotlin** Kotlin edition of bukkit module
 - **commons**: Reflections and misc
-- **database**: Database connection manager
-- **mcnbt**: NBT utilities using [Item-NBT-API](https://github.com/tr7zw/Item-NBT-API), serializer and deserializer
+- **adventure-messaging** Utilities for [Adventure](https://docs.advntr.dev/)
 
 # How to use
 
 ## Stable releases
+![Maven Central Version](https://img.shields.io/maven-central/v/cn.afternode.commons/commons)
 
 **Maven**
 ```xml
@@ -28,7 +28,3 @@ Utilities for Minecraft bukkit plugin (and more) developing
 ```groovy
 implementation "cn.afternode.commons:MODULE:VERSION"
 ```
-
-## Snapshot releases
-
-See [JitPack](https://jitpack.io/#AFterNode/afternode-commons)
