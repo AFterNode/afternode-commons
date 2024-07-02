@@ -13,7 +13,7 @@ class BukkitKtContext(val plugin: Plugin) {
      * @see MessageBuilder
      * @see BukkitKtContext.message
      */
-    var messageLinePrefix = Component.text()
+    var messageLinePrefix = Component.text().build()
 
     /**
      * Localizations for MessageBuilder
