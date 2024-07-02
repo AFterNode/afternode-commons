@@ -4,6 +4,7 @@ import cn.afternode.commons.bukkit.message.MessageBuilder
 import cn.afternode.commons.bukkit.message.TabBuilder
 import cn.afternode.commons.localizations.ILocalizations
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.ComponentLike
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.Plugin
 
@@ -13,7 +14,7 @@ class BukkitKtContext(val plugin: Plugin) {
      * @see MessageBuilder
      * @see BukkitKtContext.message
      */
-    var messageLinePrefix = Component.text().build()
+    var messageLinePrefix: ComponentLike = Component.text().build()
 
     /**
      * Localizations for MessageBuilder
