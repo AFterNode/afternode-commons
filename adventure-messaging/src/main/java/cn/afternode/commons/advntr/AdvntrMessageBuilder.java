@@ -10,6 +10,9 @@ import net.kyori.adventure.text.format.TextColor;
 
 import java.awt.*;
 
+/**
+ * Adventure-API implementation of MessageBUilder
+ */
 public class AdvntrMessageBuilder {
     private ComponentLike linePrefix = Component.text();
     private Audience audience;
@@ -125,19 +128,37 @@ public class AdvntrMessageBuilder {
         audience.sendMessage(this.build());
     }
 
+    /**
+     * Get line prefix passed to this builder
+     * @return Line prefix
+     */
     public ComponentLike getLinePrefix() {
         return linePrefix;
     }
 
+    /**
+     * Set line prefix
+     * @param prefix Adventure component
+     * @return This builder
+     */
     public AdvntrMessageBuilder linePrefix(ComponentLike prefix) {
         this.linePrefix = prefix;
         return this;
     }
 
+    /**
+     * Get Adventure audience passed to this builder
+     * @return Adventure audience
+     */
     public Audience getAudience() {
         return audience;
     }
 
+    /**
+     * Set audience for this builder
+     * @param audience Adventure audience
+     * @return This builder
+     */
     public AdvntrMessageBuilder audience(Audience audience) {
         this.audience = audience;
         return this;
