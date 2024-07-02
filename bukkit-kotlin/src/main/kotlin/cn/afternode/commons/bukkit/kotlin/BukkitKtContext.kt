@@ -30,11 +30,27 @@ class BukkitKtContext(val plugin: Plugin) {
     fun tab(sender: CommandSender? = null, ignoreCase: Boolean = false, block: TabBuilder.() -> Unit) =
         commandSuggestion(sender, block)
 
+    fun tab(sender: CommandSender?) = TabBuilder(sender)
+
     /**
      * Wrapped message builder using linePrefix and localizations in current context
+     * @return Result message
      * @see BukkitKtContext.messageLinePrefix
      * @see BukkitKtContext.localization
      * @see MessageBuilder
      */
     fun message(sender: CommandSender? = null, block: MessageBuilder.() -> Unit) = message(linePrefix = messageLinePrefix, sender = sender, locale = localization, block = block)
+
+    /**
+     * Wrapped message builder using linePrefix and localizations in current context
+     * @return Result message builder
+     * @see BukkitKtContext.messageLinePrefix
+     * @see BukkitKtContext.localization
+     * @see MessageBuilder
+     */
+    fun message(sender: CommandSender? = null): MessageBuilder = MessageBuilder().apply {
+        sender(sender)
+        linePrefix(messageLinePrefix)
+        localizations(localization)
+    }
 }
