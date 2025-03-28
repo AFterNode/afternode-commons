@@ -1,6 +1,6 @@
 [versions]
 paper-api = "1.18-R0.1-SNAPSHOT"
-paper-advntr = "4.10.1"
+paper-advntr = "4.18.0"
 adventure = "4.17.0"
 reflections = "0.10.2"
 bungeecord = "1.19-R0.1-SNAPSHOT"
