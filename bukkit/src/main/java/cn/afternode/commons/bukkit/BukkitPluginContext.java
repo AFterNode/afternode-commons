@@ -1,6 +1,7 @@
 package cn.afternode.commons.bukkit;
 
 import cn.afternode.commons.ReflectionError;
+import cn.afternode.commons.bukkit.annotations.AutoRegistrationData;
 import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
@@ -11,6 +12,7 @@ import cn.afternode.commons.bukkit.message.MessageBuilder;
 import cn.afternode.commons.bukkit.report.PluginReport;
 import cn.afternode.commons.localizations.ILocalizations;
 import cn.afternode.commons.serialization.FieldAccessException;
+import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
@@ -19,6 +21,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -31,6 +34,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -58,6 +62,7 @@ public class BukkitPluginContext {
      * @throws RuntimeException Not a valid CommandExecutor/TabExecutor; Unable to create instance
      * @see RegisterPluginCommand
      */
+    @Deprecated
     public void registerPluginCommands(String packageName) throws RuntimeException {
         Reflections ref = new Reflections(packageName);
         Set<Class<?>> classes =
@@ -97,6 +102,7 @@ public class BukkitPluginContext {
      * @see RegisterCommand
      * @throws ReflectionError Error in reflections
      */
+    @Deprecated
     public void registerCommands(String packageName) {
         Reflections ref = new Reflections(packageName);
         Set<Class<?>> classes =
@@ -130,6 +136,7 @@ public class BukkitPluginContext {
      * @param packageName Target package name
      * @see RegisterListener
      */
+    @Deprecated
     public void registerListeners(String packageName) {
         Reflections ref = new Reflections(packageName);
         Set<Class<?>> classes =
@@ -147,6 +154,87 @@ public class BukkitPluginContext {
             } catch (Throwable t) {
                 throw new RuntimeException("Cannot register %s as an event listener".formatted(c.getName()), t);
             }
+        }
+    }
+
+    /**
+     * Register commands/listeners/plugin commands from generated resources with logging enabled
+     * @throws IOException Error reading data resource
+     * @throws RuntimeException Error registering
+     */
+    public void doAutoRegistration() throws IOException, IllegalArgumentException {
+        this.doAutoRegistration(true);
+    }
+
+    /**
+     * Register commands/listeners/plugin commands from generated resources
+     * @param withLogs enable log output
+     * @throws IOException Error reading data resource
+     * @throws RuntimeException Error registering
+     */
+    public void doAutoRegistration(boolean withLogs) throws IOException, RuntimeException {
+        final AutoRegistrationData data;
+        ClassLoader loader = this.plugin.getClass().getClassLoader();
+        try (InputStream i = Objects.requireNonNull(loader.getResourceAsStream(AutoRegistrationData.LOCATION), "Auto-registration data resource")) {
+            data = new Gson().fromJson(new InputStreamReader(i), AutoRegistrationData.class);
+        }
+
+        PluginManager pm = Bukkit.getPluginManager();
+
+        // commands
+        if (!data.commands().isEmpty()) {
+            for (String command : data.commands()) {
+                try {
+                    Constructor<?> constructor = loader.loadClass(command).getDeclaredConstructor();
+                    constructor.trySetAccessible();
+                    Command c = (Command) constructor.newInstance();
+                    Bukkit.getServer().getCommandMap().register(this.plugin.getName(), c);
+                } catch (Throwable t) {
+                    throw new IllegalArgumentException("Cannot register command" + command, t);
+                }
+            }
+            if (withLogs)
+                this.plugin.getSLF4JLogger().info("Registered {} commands", data.commands().size());
+        }
+
+        // listeners
+        if (!data.listeners().isEmpty()) {
+            for (String listener : data.listeners()) {
+                try {
+                    Constructor<?> constructor = loader.loadClass(listener).getDeclaredConstructor();
+                    constructor.trySetAccessible();
+                    pm.registerEvents((Listener) constructor.newInstance(), this.plugin);
+                } catch (Throwable t) {
+                    throw new IllegalArgumentException("Cannot register listener" + listener, t);
+                }
+            }
+            if (withLogs)
+                this.plugin.getSLF4JLogger().info("Registered {} listeners", data.commands().size());
+        }
+
+        if (!data.pluginCommands().isEmpty()) {
+            Map<String, String> pcm = data.pluginCommands();
+            for (String pc : pcm.keySet()) {
+                try {
+                    String cmdName = pcm.get(pc);
+                    PluginCommand command = Bukkit.getPluginCommand(cmdName);
+                    if (command == null)
+                        throw new NullPointerException("Unknown plugin command " + cmdName);
+
+                    Constructor<?> constructor = loader.loadClass(pc).getDeclaredConstructor();
+                    constructor.trySetAccessible();
+                    Object o = constructor.newInstance();
+
+                    if (o instanceof CommandExecutor executor)
+                        command.setExecutor(executor);
+                    if (o instanceof TabCompleter completer)
+                        command.setTabCompleter(completer);
+                } catch (Throwable t) {
+                    throw new IllegalArgumentException("Cannot plugin command" + pc, t);
+                }
+            }
+            if (withLogs)
+                this.plugin.getSLF4JLogger().info("Registered {} plugin commands", pcm.size());
         }
     }
 

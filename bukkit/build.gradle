@@ -22,6 +22,8 @@ dependencies {
     testImplementation libs.gson
     testImplementation libs.guava
     testImplementation libs.netty.buffer
+    testImplementation libs.compile.testing
+    testRuntimeOnly libs.paper.api
 }
 
 test {

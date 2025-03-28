@@ -8,6 +8,7 @@ netty = "4.1.119.Final"
 gson = "2.11.0"
 guava = "33.4.5-jre"
 velocity = "3.3.0-SNAPSHOT"
+compile-testing = "0.21.0"
 
 [libraries]
 paper-api = { module = "io.papermc.paper:paper-api", version.ref="paper-api" }
@@ -23,3 +24,5 @@ netty-buffer = { module = "io.netty:netty-buffer", version.ref = "netty" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
+
+compile-testing = { module = "com.google.testing.compile:compile-testing", version.ref = "compile-testing" }
