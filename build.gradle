@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'cn.afternode.commons'
-version = '2.8.0'
+version = '2.9.0-SNAPSHOT'
 
 allprojects {
     tasks.withType(JavaCompile).configureEach {
