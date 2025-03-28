@@ -11,13 +11,13 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.12.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
-    compileOnlyApi libs.paper.api
+    compileOnly libs.paper.api
     compileOnly libs.paper.advntr
     compileOnly libs.paper.minimessage
 
     api project(":commons")
     compileOnly libs.reflections
-    compileOnlyApi libs.netty.buffer
+    compileOnly libs.netty.buffer
 
     testImplementation libs.gson
     testImplementation libs.guava
