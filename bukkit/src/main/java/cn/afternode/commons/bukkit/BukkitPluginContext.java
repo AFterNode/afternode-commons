@@ -32,6 +32,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -185,10 +186,7 @@ public class BukkitPluginContext {
         if (!data.commands().isEmpty()) {
             for (String command : data.commands()) {
                 try {
-                    Constructor<?> constructor = loader.loadClass(command).getDeclaredConstructor();
-                    constructor.trySetAccessible();
-                    Command c = (Command) constructor.newInstance();
-                    Bukkit.getServer().getCommandMap().register(this.plugin.getName(), c);
+                    Bukkit.getServer().getCommandMap().register(this.plugin.getName(), (Command) BukkitPluginContext.getOrCreateInstance(loader.loadClass(command)));
                 } catch (Throwable t) {
                     throw new IllegalArgumentException("Cannot register command" + command, t);
                 }
@@ -201,9 +199,7 @@ public class BukkitPluginContext {
         if (!data.listeners().isEmpty()) {
             for (String listener : data.listeners()) {
                 try {
-                    Constructor<?> constructor = loader.loadClass(listener).getDeclaredConstructor();
-                    constructor.trySetAccessible();
-                    pm.registerEvents((Listener) constructor.newInstance(), this.plugin);
+                    pm.registerEvents((Listener) BukkitPluginContext.getOrCreateInstance(loader.loadClass(listener)), this.plugin);
                 } catch (Throwable t) {
                     throw new IllegalArgumentException("Cannot register listener" + listener, t);
                 }
@@ -221,9 +217,7 @@ public class BukkitPluginContext {
                     if (command == null)
                         throw new NullPointerException("Unknown plugin command " + cmdName);
 
-                    Constructor<?> constructor = loader.loadClass(pc).getDeclaredConstructor();
-                    constructor.trySetAccessible();
-                    Object o = constructor.newInstance();
+                    Object o = BukkitPluginContext.getOrCreateInstance(loader.loadClass(pc));
 
                     if (o instanceof CommandExecutor executor)
                         command.setExecutor(executor);
@@ -453,5 +447,19 @@ public class BukkitPluginContext {
         if (in == null)
             throw new NullPointerException(path + " @ resource");
         return in;
+    }
+
+    private static <T> T getOrCreateInstance(Class<T> type) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        try {
+            Field instanceField = type.getDeclaredField("INSTANCE");
+            if (type.isAssignableFrom(instanceField.getType()) && Modifier.isStatic(instanceField.getModifiers())) {  // kotlin object
+                instanceField.trySetAccessible();
+                return (T) instanceField.get(null);
+            }
+        } catch (NoSuchFieldException ignored) {}
+
+        // create new instance
+        Constructor<T> constructor = type.getDeclaredConstructor();
+        return constructor.newInstance();
     }
 }
