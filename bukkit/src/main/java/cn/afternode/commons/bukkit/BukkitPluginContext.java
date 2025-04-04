@@ -398,7 +398,6 @@ public class BukkitPluginContext {
                 Files.copy(in, pth);
                 return latest;
             } else {
-                Files.createFile(pth);
                 YamlConfiguration current = YamlConfiguration.loadConfiguration(Files.newBufferedReader(pth));
                 YamlConfiguration out = ConfigurationMerger.migrate(current, latest);
                 out.save(pth.toFile());
