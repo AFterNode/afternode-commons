@@ -1,9 +1,13 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
     id 'java-library'
-    id "com.gradleup.nmcp" version "0.0.8"
+    id 'org.jetbrains.kotlin.jvm' version '2.1.20' apply false
+
+    id "com.vanniktech.maven.publish" version "0.31.0"
 }
 
 group = 'cn.afternode.commons'
@@ -20,6 +24,7 @@ subprojects {
     apply plugin: "java"
     apply plugin: "signing"
     apply plugin: "java-library"
+    apply plugin: "com.vanniktech.maven.publish"
 
     group = parent.group
     version = parent.version
@@ -29,71 +34,39 @@ subprojects {
         withJavadocJar()
     }
 
-    publishing {
-        publications {
-            mavenJava (MavenPublication) {
-                group project.group
-                artifactId project.name
-                version project.version
-                from components.java
-
-                pom {
-                    name = "AFterNode Commons"
-                    description = "Utilities for Minecraft bukkit plugin (and more) developing"
-                    url = "https://github.com/AFterNode/afternode-commons"
-
-                    licenses {
-                        license {
-                            name = "MIT License"
-                            url = "https://github.com/AFterNode/afternode-commons/blob/main/LICENSE"
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id = "h3xadecimal"
-                            name = "H3xadecimal"
-                            email = "h3xadecimal@afternode.cn"
-                        }
-                    }
-
-                    scm {
-                        url = "https://github.com/AFterNode/afternode-commons"
-                    }
-                }
-            }
-        }
-
-        repositories {
-            if (((String) project.version).endsWith("-SNAPSHOT")) {
-                maven {
-                    name = "CentralSnapshots"
-                    url = "https://central.sonatype.com/repository/maven-snapshots/"
-                    credentials {
-                        username = project.hasProperty("centralUsername") ? project.centralUsername : "NONE"
-                        password = project.hasProperty("centralPassword") ? project.centralPassword : "NONE"
-                    }
-                }
-            }
-        }
-    }
-
     artifacts {
         archives javadocJar, sourcesJar
     }
 
-    signing {
-        sign publishing.publications.mavenJava
-    }
-}
+    mavenPublishing {
+        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+        signAllPublications()
 
-nmcp {
-    publishAllProjectsProbablyBreakingProjectIsolation {
-        username = project.hasProperty("centralUsername") ? project.centralUsername : "NONE"
-        password = project.hasProperty("centralPassword") ? project.centralPassword : "NONE"
+        coordinates((String) rootProject.group, (String) rootProject.name, (String) rootProject.version)
+        pom {
+            name = "AFterNode Commons"
+            description = "Utilities for Minecraft bukkit plugin (and more) developing"
+            url = "https://github.com/AFterNode/afternode-commons"
 
-        // or if you want to publish automatically
-        publicationType = "AUTOMATIC"
+            licenses {
+                license {
+                    name = "MIT License"
+                    url = "https://github.com/AFterNode/afternode-commons/blob/main/LICENSE"
+                }
+            }
+
+            developers {
+                developer {
+                    id = "h3xadecimal"
+                    name = "H3xadecimal"
+                    email = "h3xadecimal@afternode.cn"
+                }
+            }
+
+            scm {
+                url = "https://github.com/AFterNode/afternode-commons"
+            }
+        }
     }
 }
 
