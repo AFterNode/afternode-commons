@@ -2,6 +2,7 @@ import cn.afternode.commons.bukkit.kotlin.command.CompositeCommand
 import cn.afternode.commons.bukkit.kotlin.command.ParsedArguments
 import cn.afternode.commons.bukkit.kotlin.command.argument.itemTypeArgument
 import cn.afternode.commons.bukkit.kotlin.command.argument.plainTextArgument
+import net.kyori.adventure.text.Component
 import kotlin.test.Test
 
 class TestCommand: CompositeCommand("test", "test") {
@@ -9,6 +10,9 @@ class TestCommand: CompositeCommand("test", "test") {
         argument(plainTextArgument("wow", "wow_a", "wow_b"))
         argument(itemTypeArgument("item"))
         flag(plainTextArgument("flag"))
+        helpProvider = {
+            Component.text("TEST")
+        }
         executes = {
             println(this.args["wow"])
             println(this.args["item"])
@@ -18,6 +22,8 @@ class TestCommand: CompositeCommand("test", "test") {
 
     init {
         this.add(sub)
+        helpMessageHeader = Component.text("HEADER")
+        helpMessagePrefix = Component.text("[PREFIX]")
     }
 
     @Test
@@ -35,5 +41,10 @@ class TestCommand: CompositeCommand("test", "test") {
     @Test
     fun testExecution() {
         this.execute(Dummy, "", "sub wow diamond_pickaxe --flag=awa".split(' ').toTypedArray())
+    }
+
+    @Test
+    fun testHelp() {
+        this.execute(Dummy, "", arrayOf("nah"))
     }
 }

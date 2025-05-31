@@ -1,12 +1,15 @@
 package cn.afternode.commons.bukkit.kotlin.command
 
 import cn.afternode.commons.bukkit.kotlin.commandSuggestion
+import cn.afternode.commons.bukkit.kotlin.message
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandMap
 import org.bukkit.command.CommandSender
 import org.bukkit.permissions.Permission
+import java.awt.Color
 import kotlin.reflect.KProperty
 
 abstract class CompositeCommand(
@@ -15,6 +18,9 @@ abstract class CompositeCommand(
     val rootPermission: Permission? = null,
 ): Command(name) {
     internal val resolution = hashMapOf<String, SubCommand>()
+
+    protected var helpMessagePrefix: Component? = null
+    protected var helpMessageHeader: Component = Component.empty()
 
     fun doRegister() = this.doRegister(Bukkit.getCommandMap())
 
@@ -36,9 +42,24 @@ abstract class CompositeCommand(
     override fun execute(p0: CommandSender, p1: String, p2: Array<String>): Boolean {
         val sub = p2.firstOrNull()?.lowercase()
         if (sub == null || sub !in resolution) {
-            // TODO help
+            // build helps
+            p0.sendMessage(message(linePrefix = this.helpMessagePrefix ?: Component.empty()) {
+                append(helpMessageHeader)
+
+                for (entry in resolution) {
+                    val help = entry.value.helpProvider(p0) ?: continue
+                    line().text(entry.key).text(" - ", Color.GRAY).append(help)
+                }
+            })
         } else {
-            this.resolution[sub]!!.execute(p0, p2.sliceArray(1..<p2.size))
+            val command = this.resolution[sub]!!
+
+            if (command.permission != null && !p0.hasPermission(command.permission!!)) {
+                p0.sendMessage(command.permissionMessage)
+                return true
+            }
+
+            command.execute(p0, p2.sliceArray(1..<p2.size))
         }
 
         return true
@@ -83,6 +104,16 @@ class SubCommand(
         }
 
     var helpProvider: (CommandSender) -> Component? = { null }
+        set(value) {
+            checkFrozen("set help provider")
+            field = value
+        }
+    var permissionMessage: Component = Component.text("Sorry, but you have no permission to do that")
+        set(value) {
+            checkFrozen("set permission message")
+            field = value
+        }
+
     var executes: CommandContext.() -> Unit = {}
         set(value) {
             checkFrozen("set executor")

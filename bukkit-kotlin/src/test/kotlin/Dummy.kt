@@ -1,4 +1,5 @@
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Server
 import org.bukkit.command.CommandSender
 import org.bukkit.permissions.Permission
@@ -22,6 +23,10 @@ object Dummy: CommandSender {
 
     override fun sendMessage(sender: UUID?, vararg messages: String) {
         TODO("Not yet implemented")
+    }
+
+    override fun sendMessage(message: Component) {
+        println(PlainTextComponentSerializer.plainText().serialize(message))
     }
 
     override fun getServer(): Server {
