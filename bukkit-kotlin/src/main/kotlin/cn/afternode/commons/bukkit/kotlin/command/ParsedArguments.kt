@@ -21,9 +21,7 @@ class ParsedArguments(vararg args: String) {
         val buffer = StringBuilder()
         var flagKey: String? = null
 
-        val resolved = StringBuilder()
         for (c in args.joinToString(" ")) {
-            resolved.append(c)
             var endLong = false
 
             if (!ignoreNextFormat && c == '\\') {
@@ -92,10 +90,16 @@ class ParsedArguments(vararg args: String) {
             }
         }
 
-        if (resolveFlag == FLAG_RS_CONTENT) {
-            resolvedFlags[flagKey!!] = buffer.toString()
-        } else {
-            resolvedArgs += buffer.toString()
+        when (resolveFlag) {
+            FLAG_RS_CONTENT -> {
+                resolvedFlags[flagKey!!] = buffer.toString()
+            }
+            FLAG_RS_KEY -> {    // incomplete flag
+                resolvedFlags[buffer.toString()] = ""
+            }
+            else -> {
+                resolvedArgs += buffer.toString()
+            }
         }
 
         this.args = resolvedArgs.toList()
