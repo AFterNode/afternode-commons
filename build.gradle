@@ -7,7 +7,7 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm' version '2.1.20' apply false
 
-    id "com.vanniktech.maven.publish" version "0.31.0"
+    id "com.vanniktech.maven.publish" version "0.32.0"
 }
 
 group = 'cn.afternode.commons'
@@ -29,20 +29,11 @@ subprojects {
     group = parent.group
     version = parent.version
 
-    java {
-        withSourcesJar()
-        withJavadocJar()
-    }
-
-    artifacts {
-        archives javadocJar, sourcesJar
-    }
-
     mavenPublishing {
         publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
         signAllPublications()
 
-        coordinates((String) rootProject.group, (String) rootProject.name, (String) rootProject.version)
+        coordinates("cn.afternode.commons", (String) project.name, (String) project.version)
         pom {
             name = "AFterNode Commons"
             description = "Utilities for Minecraft bukkit plugin (and more) developing"
