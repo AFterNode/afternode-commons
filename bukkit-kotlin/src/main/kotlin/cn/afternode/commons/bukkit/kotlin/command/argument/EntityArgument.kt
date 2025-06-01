@@ -2,6 +2,7 @@ package cn.afternode.commons.bukkit.kotlin.command.argument
 
 import cn.afternode.commons.bukkit.BukkitResolver
 import cn.afternode.commons.bukkit.kotlin.command.ArgumentResolver
+import cn.afternode.commons.bukkit.kotlin.command.FlagResolver
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
@@ -19,25 +20,29 @@ class EntityArgument(override val key: String) : ArgumentResolver<List<Entity>> 
 fun entityArgument(key: String) =
     EntityArgument(key)
 
-class PlayerArgument(override val key: String) : ArgumentResolver<Player> {
+class PlayerArgument(override val key: String, override val required: Boolean) : ArgumentResolver<Player>, FlagResolver<Player> {
     override fun resolve(sender: CommandSender, current: String): Player? =
         BukkitResolver.resolvePlayerOnline(current)
 
     override fun completion(sender: CommandSender, current: String): List<String> =
         Bukkit.getOnlinePlayers().parallelStream().map(Player::getName)
             .toList()
+            .filter { it.startsWith(current) }
 }
 
-fun playerArgument(key: String) =
-    PlayerArgument(key)
+fun playerArgument(key: String, required: Boolean) =
+    PlayerArgument(key, required)
 
-class OfflinePlayerArgument(override val key: String) : ArgumentResolver<OfflinePlayer> {
+class OfflinePlayerArgument(override val key: String, override val required: Boolean) : ArgumentResolver<OfflinePlayer>, FlagResolver<OfflinePlayer> {
     override fun resolve(
         sender: CommandSender,
         current: String
     ): OfflinePlayer? =
         BukkitResolver.resolvePlayer(current)
+
+    override fun completion(sender: CommandSender, current: String): List<String> =
+        listOf("uuid:")
 }
 
-fun offlinePlayerArgument(key: String) =
-    OfflinePlayerArgument(key)
+fun offlinePlayerArgument(key: String, required: Boolean) =
+    OfflinePlayerArgument(key, required)
