@@ -171,7 +171,7 @@ class SubCommand(
             }
         }
         for (resolver in this.flags) {
-            val r = resolver.resolve(sender, parsed)
+            val r = parsed.flags[resolver.key]?.let { resolver.resolve(sender, it) }
             try {
                 if (r == null) {
                     if (resolver.required)    // missing parameters

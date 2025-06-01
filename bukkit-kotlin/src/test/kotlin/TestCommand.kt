@@ -28,7 +28,7 @@ class TestCommand: CompositeCommand("test", "test") {
 
     @Test
     fun testParsedArguments() {
-        val parsed = ParsedArguments("test", "--test=value", "\'long", "text\'", "--test-b=\"long", "\\\\text\"")
+        val parsed = ParsedArguments("test", "--test=value", "\'long", "text\'", "--test-b=\"long", "\\\\text\"", "--test-c=")
         println(parsed.args)
         println(parsed.flags)
     }

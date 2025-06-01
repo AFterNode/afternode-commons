@@ -2,7 +2,6 @@ package cn.afternode.commons.bukkit.kotlin.command.argument
 
 import cn.afternode.commons.bukkit.kotlin.command.ArgumentResolver
 import cn.afternode.commons.bukkit.kotlin.command.FlagResolver
-import cn.afternode.commons.bukkit.kotlin.command.ParsedArguments
 import org.bukkit.command.CommandSender
 import java.net.URL
 
@@ -18,11 +17,6 @@ class PlainTextArgument(
 
     override fun completion(sender: CommandSender, current: String): List<String> =
         this.completions
-
-    override fun resolve(
-        sender: CommandSender,
-        args: ParsedArguments
-    ): String? = args.flags[key]
 }
 
 fun plainTextArgument(key: String, vararg completions: String, required: Boolean = false) =
@@ -35,15 +29,6 @@ class URLArgument(override val key: String, override val required: Boolean) : Ar
         } catch (_: IllegalArgumentException) {
             null
         }
-
-    override fun resolve(
-        sender: CommandSender,
-        args: ParsedArguments
-    ): URL? = try {
-        args.flags[key]?.let(::URL)
-    } catch (_: IllegalArgumentException) {
-        null
-    }
 }
 
 fun urlArgument(key: String, required: Boolean) =

@@ -32,21 +32,9 @@ interface ArgumentResolver<T : Any> {
  * Base interface of flag resolvers
  * @see cn.afternode.commons.bukkit.kotlin.command.argument
  */
-interface FlagResolver<T : Any> {
-    /**
-     * Key of this flag
-     */
-    val key: String
-
+interface FlagResolver<T : Any>: ArgumentResolver<T> {
     /**
      * Treat this flag as required
      */
     val required: Boolean
-
-    /**
-     * Resolve arguments to flags
-     * @param sender Executor of current command
-     * @param args Pre-parsed arguments of current command
-     */
-    fun resolve(sender: CommandSender, args: ParsedArguments): T?
 }

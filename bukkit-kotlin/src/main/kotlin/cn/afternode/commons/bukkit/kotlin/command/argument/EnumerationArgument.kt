@@ -2,7 +2,6 @@ package cn.afternode.commons.bukkit.kotlin.command.argument
 
 import cn.afternode.commons.bukkit.kotlin.command.ArgumentResolver
 import cn.afternode.commons.bukkit.kotlin.command.FlagResolver
-import cn.afternode.commons.bukkit.kotlin.command.ParsedArguments
 import org.bukkit.command.CommandSender
 
 class EnumerationArgument<E : Enum<*>>(
@@ -28,13 +27,6 @@ class EnumerationArgument<E : Enum<*>>(
             values.getOrNull(index)
         } else null
     }
-
-    override fun resolve(
-        sender: CommandSender,
-        args: ParsedArguments
-    ): E? = if (this.key in args.flags)
-        this.resolve(sender, args.flags[this.key]!!)
-    else null
 
     override fun completion(sender: CommandSender, current: String): List<String> =
         completions
