@@ -210,13 +210,18 @@ class SubCommand(
                     "-${resolver.key}"
                 else
                     "--${resolver.key}"
-                if (last.startsWith(comp))
+                if (comp.startsWith(last))
                     results += comp
             }
         } else {
             val last = this.keyedFlags[parsed.lastFlag!!.lowercase()]
             if (last != null) {
+                val comp = if (last.key.length == 1)
+                    "-${last.key}"
+                else
+                    "--${last.key}"
                 results += last.completion(sender, parsed.flags[parsed.lastFlag] ?: "")
+                    .map { "$comp=$it" }
             }
         }
 
