@@ -30,7 +30,7 @@ class PlayerArgument(override val key: String, override val required: Boolean) :
             .filter { it.startsWith(current) }
 }
 
-fun playerArgument(key: String, required: Boolean) =
+fun playerArgument(key: String, required: Boolean = false) =
     PlayerArgument(key, required)
 
 class OfflinePlayerArgument(override val key: String, override val required: Boolean) : ArgumentResolver<OfflinePlayer>, FlagResolver<OfflinePlayer> {
@@ -44,5 +44,5 @@ class OfflinePlayerArgument(override val key: String, override val required: Boo
         listOf("uuid:")
 }
 
-fun offlinePlayerArgument(key: String, required: Boolean) =
+fun offlinePlayerArgument(key: String, required: Boolean = false) =
     OfflinePlayerArgument(key, required)

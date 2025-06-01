@@ -31,5 +31,5 @@ class URLArgument(override val key: String, override val required: Boolean) : Ar
         }
 }
 
-fun urlArgument(key: String, required: Boolean) =
+fun urlArgument(key: String, required: Boolean = false) =
     URLArgument(key, required)
