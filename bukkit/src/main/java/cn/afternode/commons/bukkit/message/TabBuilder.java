@@ -6,9 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class TabBuilder {
@@ -43,6 +41,26 @@ public class TabBuilder {
         for (String i: items)
             if (i.startsWith(prefix))
                 list.add(i);
+        return this;
+    }
+
+    /**
+     * Add all items to this builder
+     * @param items items to add
+     * @return this builder
+     */
+    public TabBuilder addAll(String... items) {
+        list.addAll(Arrays.asList(items));
+        return this;
+    }
+
+    /**
+     * Add all items to this builder
+     * @param items items to add
+     * @return this builder
+     */
+    public TabBuilder addAll(Collection<String> items) {
+        list.addAll(items);
         return this;
     }
 

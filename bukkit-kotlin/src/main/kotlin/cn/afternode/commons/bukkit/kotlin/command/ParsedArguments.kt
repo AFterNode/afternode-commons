@@ -9,6 +9,9 @@ class ParsedArguments(vararg args: String) {
     val args: List<String>
     val flags: Map<String, String>
 
+    var lastFlag: String? = null
+        private set
+
     init {
         val resolvedArgs = arrayListOf<String>()
         val resolvedFlags = hashMapOf<String, String>()
@@ -72,6 +75,7 @@ class ParsedArguments(vararg args: String) {
             } else if (resolveFlag == FLAG_RS_CONTENT) {
                 if (c == ' ') {
                     resolvedFlags[flagKey!!] = buffer.toString()
+                    lastFlag = flagKey
                     flagKey = null
                     buffer.clear()
                     resolveFlag = FLAG_RS_NONE
@@ -93,9 +97,11 @@ class ParsedArguments(vararg args: String) {
         when (resolveFlag) {
             FLAG_RS_CONTENT -> {
                 resolvedFlags[flagKey!!] = buffer.toString()
+                lastFlag = flagKey
             }
             FLAG_RS_KEY -> {    // incomplete flag
                 resolvedFlags[buffer.toString()] = ""
+                lastFlag = flagKey
             }
             else -> {
                 resolvedArgs += buffer.toString()

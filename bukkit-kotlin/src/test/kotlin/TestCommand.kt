@@ -9,7 +9,7 @@ class TestCommand: CompositeCommand("test", "test") {
     val sub by sub("sub") {
         argument(plainTextArgument("wow", "wow_a", "wow_b"))
         argument(itemTypeArgument("item"))
-        flag(plainTextArgument("flag"))
+        flag(plainTextArgument("flag", "selection1", "2selection"))
         helpProvider = {
             Component.text("TEST")
         }

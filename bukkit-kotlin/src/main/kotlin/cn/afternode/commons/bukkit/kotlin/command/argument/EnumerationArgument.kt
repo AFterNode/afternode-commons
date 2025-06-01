@@ -29,7 +29,7 @@ class EnumerationArgument<E : Enum<*>>(
     }
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        completions
+        completions.filter { it.startsWith(current) }
 }
 
 fun <E : Enum<*>> enumerationArgument(key: String, type: Class<E>, required: Boolean = false) =

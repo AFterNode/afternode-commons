@@ -16,7 +16,7 @@ class PlainTextArgument(
     override fun resolve(sender: CommandSender, current: String): String? = current
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        this.completions
+        this.completions.filter { it.startsWith(current) }
 }
 
 fun plainTextArgument(key: String, vararg completions: String, required: Boolean = false) =

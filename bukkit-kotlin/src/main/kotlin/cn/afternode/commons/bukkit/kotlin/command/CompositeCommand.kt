@@ -3,7 +3,6 @@ package cn.afternode.commons.bukkit.kotlin.command
 import cn.afternode.commons.bukkit.kotlin.commandSuggestion
 import cn.afternode.commons.bukkit.kotlin.message
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandMap
@@ -73,7 +72,7 @@ abstract class CompositeCommand(
                 val slice = args.sliceArray(1..<args.size)
                 val comp = resolution[args[0].lowercase()]?.completion(sender, slice)
                 if (comp != null)
-                    this.add(slice.lastOrNull() ?: "", *comp)
+                    this.addAll(comp)
             }
         }
 }
@@ -96,6 +95,7 @@ class SubCommand(
 
     private val arguments = arrayListOf<ArgumentResolver<*>>()
     private val flags = arrayListOf<FlagResolver<*>>()
+    private val keyedFlags = hashMapOf<String, FlagResolver<*>>()
 
     var permission: Permission? = permission1
         set(value) {
@@ -148,6 +148,7 @@ class SubCommand(
     fun flag(flag: FlagResolver<*>) {
         this.checkFrozen("add flag")
         this.flags += flag
+        this.keyedFlags[flag.key] = flag
     }
 
     fun execute(sender: CommandSender, args: Array<out String>) {
@@ -189,7 +190,8 @@ class SubCommand(
         }
     }
 
-    fun completion(sender: CommandSender, args: Array<out String>): Array<String> {
+    fun completion(sender: CommandSender, args: Array<out String>): List<String> {
+        val last = args.last()
         val parsed = ParsedArguments(*args)
         val results = arrayListOf<String>()
 
@@ -198,15 +200,27 @@ class SubCommand(
             results.addAll(resolver.completion(sender, string))
         }
 
-        // resolve flags
-        for (resolver in this.flags) {
-            results += if (resolver.key.length == 1)
-                "-${resolver.key}"
-            else
-                "--${resolver.key}"
+
+
+        // incomplete flag
+        if (parsed.lastFlag == null) {
+            // resolve flags
+            for (resolver in this.flags) {
+                val comp = if (resolver.key.length == 1)
+                    "-${resolver.key}"
+                else
+                    "--${resolver.key}"
+                if (last.startsWith(comp))
+                    results += comp
+            }
+        } else {
+            val last = this.keyedFlags[parsed.lastFlag!!.lowercase()]
+            if (last != null) {
+                results += last.completion(sender, parsed.flags[parsed.lastFlag] ?: "")
+            }
         }
 
-        return results.toTypedArray()
+        return results
     }
 
     private fun failBadArgs(sender: CommandSender) {

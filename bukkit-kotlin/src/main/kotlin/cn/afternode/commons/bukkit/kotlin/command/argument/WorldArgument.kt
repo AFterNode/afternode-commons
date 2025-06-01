@@ -19,7 +19,7 @@ class WorldArgument(override val key: String, override val required: Boolean) : 
         Bukkit.getWorld(current)
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        worlds
+        worlds.filter { it.startsWith(current) }
 }
 
 /**

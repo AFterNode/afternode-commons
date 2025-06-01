@@ -14,7 +14,7 @@ class BooleanArgument(override val key: String, override val required: Boolean) 
         current.lowercase().toBooleanStrictOrNull() ?: (current.toIntOrNull() != 0)
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        booleanConstants
+        booleanConstants.filter { it.startsWith(current) }
 }
 
 fun booleanArgument(key: String, required: Boolean = false) =

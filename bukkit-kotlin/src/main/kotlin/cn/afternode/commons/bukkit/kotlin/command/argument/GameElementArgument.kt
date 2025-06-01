@@ -29,7 +29,7 @@ open class MaterialArgument(override val key: String) : ArgumentResolver<Materia
         }
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        materials
+        materials.filter { it.startsWith(current) }
 }
 
 fun materialArgument(key: String) =
@@ -46,7 +46,7 @@ class ItemTypeArgument(key: String) : MaterialArgument(key) {
     }
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        items
+        items.filter { it.startsWith(current) }
 }
 
 fun itemTypeArgument(key: String) =
@@ -62,7 +62,7 @@ class BlockTypeArgument(key: String) : MaterialArgument(key) {
         super.resolve(sender, current)?.takeIf(Material::isBlock)
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        blocks
+        blocks.filter { it.startsWith(current) }
 }
 
 fun blockTypeArgument(key: String) =
@@ -89,7 +89,7 @@ open class EntityTypeArgument(override val key: String) : ArgumentResolver<Entit
         }
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        entities
+        entities.filter { it.startsWith(current) }
 }
 
 fun entityTypeArgument(key: String) =
@@ -105,7 +105,7 @@ class LivingEntityTypeArgument(key: String) : EntityTypeArgument(key) {
         super.resolve(sender, current)?.takeIf(EntityType::isAlive)
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        livingEntities
+        livingEntities.filter { it.startsWith(current) }
 }
 
 fun livingEntityTypeArgument(key: String) =
@@ -133,7 +133,7 @@ class EnchantmentArgument(override val key: String) : ArgumentResolver<Enchantme
             ?.let(Enchantment::getByKey)
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        enchantments
+        enchantments.filter { it.startsWith(current) }
 }
 
 fun enchantmentArgument(key: String) =
@@ -155,7 +155,7 @@ class PotionEffectTypeArgument(override val key: String) : ArgumentResolver<Poti
             ?.let(PotionEffectType::getByKey)
 
     override fun completion(sender: CommandSender, current: String): List<String> =
-        potions
+        potions.filter { it.startsWith(current) }
 }
 
 fun potionEffectTypeArgument(key: String) =
