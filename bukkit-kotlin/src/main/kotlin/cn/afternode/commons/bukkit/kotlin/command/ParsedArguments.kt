@@ -22,7 +22,6 @@ class ParsedArguments(vararg args: String) {
         var ignoreNextFormat = false
 
         val buffer = StringBuilder()
-        var flagKey: String? = null
 
         for (c in args.joinToString(" ")) {
             var endLong = false
@@ -40,7 +39,7 @@ class ParsedArguments(vararg args: String) {
             if (resolveLong) {
                 if (c == longChar) {    // end long text resolution
                     if (resolveFlag == FLAG_RS_CONTENT) {   // end flag content resolution
-                        resolvedFlags[flagKey!!] = buffer.toString()
+                        resolvedFlags[lastFlag!!] = buffer.toString()
                         resolveFlag = FLAG_RS_NONE
                     } else {
                         resolvedArgs += buffer.toString()
@@ -68,15 +67,14 @@ class ParsedArguments(vararg args: String) {
             } else if (resolveFlag == FLAG_RS_KEY) {
                 if (c == '=') {
                     resolveFlag = FLAG_RS_CONTENT
-                    flagKey = buffer.toString()
+                    lastFlag = buffer.toString()
                     buffer.clear()
                 } else
                     buffer.append(c)
             } else if (resolveFlag == FLAG_RS_CONTENT) {
                 if (c == ' ') {
-                    resolvedFlags[flagKey!!] = buffer.toString()
-                    lastFlag = flagKey
-                    flagKey = null
+                    resolvedFlags[lastFlag!!] = buffer.toString()
+                    lastFlag = null
                     buffer.clear()
                     resolveFlag = FLAG_RS_NONE
                 } else {
@@ -96,12 +94,10 @@ class ParsedArguments(vararg args: String) {
 
         when (resolveFlag) {
             FLAG_RS_CONTENT -> {
-                resolvedFlags[flagKey!!] = buffer.toString()
-                lastFlag = flagKey
+                resolvedFlags[lastFlag!!] = buffer.toString()
             }
             FLAG_RS_KEY -> {    // incomplete flag
                 resolvedFlags[buffer.toString()] = ""
-                lastFlag = flagKey
             }
             else -> {
                 resolvedArgs += buffer.toString()
