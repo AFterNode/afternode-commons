@@ -153,16 +153,11 @@ public class ComponentStyle {
     public Style build() {
         Style.Builder builder = Style.style();
         builder.color(color);
-        if (italic)
-            builder.decoration(TextDecoration.ITALIC, true);
-        if (bold)
-            builder.decoration(TextDecoration.BOLD, true);
-        if (underline)
-            builder.decoration(TextDecoration.UNDERLINED, true);
-        if (strike)
-            builder.decoration(TextDecoration.STRIKETHROUGH, true);
-        if (obfuscated)
-            builder.decoration(TextDecoration.OBFUSCATED, true);
+        builder.decoration(TextDecoration.ITALIC, italic);
+        builder.decoration(TextDecoration.BOLD, bold);
+        builder.decoration(TextDecoration.UNDERLINED, underline);
+        builder.decoration(TextDecoration.STRIKETHROUGH, strike);
+        builder.decoration(TextDecoration.OBFUSCATED, obfuscated);
 
         return builder.build();
     }
