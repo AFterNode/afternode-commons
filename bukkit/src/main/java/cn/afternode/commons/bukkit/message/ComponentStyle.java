@@ -151,6 +151,24 @@ public class ComponentStyle {
      * @see Style
      */
     public Style build() {
+        return this.makeBuilder().build();
+    }
+
+    /**
+     * Build to {@link Style} without color
+     * @return result
+     */
+    public Style buildNoColor() {
+        Style.Builder builder = Style.style();
+        builder.decoration(TextDecoration.ITALIC, italic);
+        builder.decoration(TextDecoration.BOLD, bold);
+        builder.decoration(TextDecoration.UNDERLINED, underline);
+        builder.decoration(TextDecoration.STRIKETHROUGH, strike);
+        builder.decoration(TextDecoration.OBFUSCATED, obfuscated);
+        return builder.build();
+    }
+
+    Style.Builder makeBuilder() {
         Style.Builder builder = Style.style();
         builder.color(color);
         builder.decoration(TextDecoration.ITALIC, italic);
@@ -158,7 +176,6 @@ public class ComponentStyle {
         builder.decoration(TextDecoration.UNDERLINED, underline);
         builder.decoration(TextDecoration.STRIKETHROUGH, strike);
         builder.decoration(TextDecoration.OBFUSCATED, obfuscated);
-
-        return builder.build();
+        return builder;
     }
 }

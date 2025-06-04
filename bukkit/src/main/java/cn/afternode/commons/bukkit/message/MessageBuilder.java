@@ -184,7 +184,11 @@ public class MessageBuilder {
      * @see java.awt.Color
      */
     public MessageBuilder text(String text, Color color) {
-        this.component.append(Component.text(text).color(TextColor.color(color.getRGB())));
+        TextComponent builder = Component.text(text);
+        ComponentStyle style = this.style();
+        if (style != null)
+            builder = builder.style(style.buildNoColor());
+        this.component.append(builder.color(TextColor.color(color.getRGB())));
         return this;
     }
 
